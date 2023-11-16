@@ -1,0 +1,11 @@
+services:
+  app:
+    container_name: app
+    stdin_open: true
+    tty: true
+    image: react
+    build: .
+    ports:
+      - "3000:3000"
+    volumes:
+    - ./src:/app/src:ro
