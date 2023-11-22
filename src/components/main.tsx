@@ -13,12 +13,17 @@ const InputWrapper = styled.div`
 `;
 
 const Input = styled.input`
-	padding: 8px;
+	padding: 10px;
 	border: 1px solid #ccc;
 	border-radius: 20px;
 	width: 534px;
 	height: 60px;
 	font-size: 20px;
+
+	@media (max-width: 768px) {
+		width: 367px;
+		font-size: 17px;
+	}
 `;
 
 const Button = styled.button`
@@ -37,6 +42,9 @@ const Button = styled.button`
 
 	&:hover {
 		background-color: #b5645a;
+	}
+
+	@media (max-width: 768px) {
 	}
 `;
 
