@@ -6,7 +6,7 @@ const Wrapper = styled.div`
 	flex-direction: column;
 `;
 
-const InputWrapper = styled.div`
+const InputWrapper = styled.form`
 	position: relative;
 	display: flex;
 	justify-content: center;
@@ -123,13 +123,13 @@ export default function Main() {
 	const [historyList, setHistoryList] = useState<string[]>([]);
 	const [isInputFocused, setIsInputFocused] = useState(false);
 	const [latestShortURL, setLatestShortURL] = useState<string>('');
-	const [isHistoryVisible, setIsHistoryVisible] = useState(false);
+	// const [isHistoryVisible, setIsHistoryVisible] = useState(false);
 
 	const inputChange = (e: { target: { value: SetStateAction<string> } }) => {
 		setInputValue(e.target.value);
 	};
 
-	const buttonClick = (e: React.FormEvent) => {
+	const shortButtonClick = (e: React.FormEvent) => {
 		e.preventDefault();
 		if (inputValue.trim() !== '') {
 			setHistoryList((prevList) => [...prevList, inputValue]);
@@ -144,9 +144,7 @@ export default function Main() {
 
 	const inputBlur = () => {
 		setIsInputFocused(false);
-		if (!isHistoryVisible) {
-			setIsHistoryVisible(false);
-		}
+		
 	};
 
 	const handleCopy = (url: string) => {
@@ -167,48 +165,44 @@ export default function Main() {
 
 	return (
 		<Wrapper>
-			<form onSubmit={buttonClick}>
-				<InputWrapper>
-					<Input
-						type='text'
-						placeholder='Please enter a long URL...'
-						value={inputValue}
-						onChange={inputChange}
-						onFocus={inputFocus}
-						onBlur={inputBlur}
-						style={{
-							borderRadius:
-								isInputFocused && historyList.length > 0
-									? '20px 20px 0 0'
-									: '20px',
-							borderBottom:
-								isInputFocused && historyList.length > 0
-									? 'none'
-									: '1px solid #ccc',
-						}}
-					/>
+			<InputWrapper onSubmit={shortButtonClick} >
+				<Input
+					type='text'
+					placeholder='Please enter a long URL...'
+					value={inputValue}
+					onChange={inputChange}
+					onFocus={inputFocus}
+					onBlur={inputBlur}
+					style={{
+						borderRadius:
+							isInputFocused && historyList.length > 0
+								? '20px 20px 0 0'
+								: '20px',
+						borderBottom:
+							isInputFocused && historyList.length > 0
+								? 'none'
+								: '1px solid #ccc',
+					}}
+				/>
 
-					<Button type='submit'>short</Button>
+				<Button type='submit'>short</Button>
 
-					{isInputFocused && isHistoryVisible && historyList.length > 0 && (
-						<HistoryList>
-							{historyList.map((item, index) => (
-								<HistoryItem key={index}>
-									<span>{item}</span>
-									<div>
-										<CopyButton onClick={() => handleCopy(item)}>
-											Copy
-										</CopyButton>
-										<DeleteButton onClick={() => handleDelete(index)}>
-											Delete
-										</DeleteButton>
-									</div>
-								</HistoryItem>
-							))}
-						</HistoryList>
-					)}
-				</InputWrapper>
-			</form>
+				{isInputFocused && historyList.length > 0 && (
+					<HistoryList>
+						{historyList.map((item, index) => (
+							<HistoryItem key={index}>
+								<span>{item}</span>
+								<div>
+									<CopyButton onClick={() => handleCopy(item)}>Copy</CopyButton>
+									<DeleteButton onClick={() => handleDelete(index)}>
+										Delete
+									</DeleteButton>
+								</div>
+							</HistoryItem>
+						))}
+					</HistoryList>
+				)}
+			</InputWrapper>
 			<LatestShortURL>
 				<span>{latestShortURL}</span>
 
