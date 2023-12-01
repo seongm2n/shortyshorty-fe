@@ -126,6 +126,8 @@ export default function Main() {
 	const [historyList, setHistoryList] = useState<string[]>([]);
 	const [latestShortURL, setLatestShortURL] = useState<string>('');
 	const [isSearchOpen, setIsSearchOpen] = useState(false);
+	const [isCopied, setIsCopied] = useState(false);
+
 	const searchRef = useRef(null);
 
 	const inputChange = (e: { target: { value: SetStateAction<string> } }) => {
@@ -146,9 +148,17 @@ export default function Main() {
 		setIsSearchOpen(true);
 	};
 
-	const handleCopy = (url: string) => {
-		console.log('Copy button clicked');
-		console.log('Copied:', url);
+	const handleCopyUrl = async (url: string) => {
+		try {
+			await navigator.clipboard.writeText(url);
+			setIsCopied(true);
+
+			setTimeout(()=>{
+				setIsCopied(false);
+			},2000);
+		} catch (err) {
+			console.error('failed copied',err);
+		}
 	};
 
 	const handleDelete = (index: number) => {
@@ -197,8 +207,8 @@ export default function Main() {
 								{historyList.map((item, index) => (
 									<HistoryItem key={index}>
 										<span>{item}</span>
-										<div onClick={(e) => e.stopPropagation()}>
-											<CopyButton onClick={() => handleCopy(item)}>
+										<div>
+											<CopyButton onClick={() => handleCopyUrl(item)} disabled={isCopied}>
 												Copy
 											</CopyButton>
 											<DeleteButton onClick={() => handleDelete(index)}>
@@ -216,7 +226,7 @@ export default function Main() {
 				<span>{latestShortURL}</span>
 
 				{latestShortURL ? (
-					<CopyButton onClick={() => handleCopy(latestShortURL)}>
+					<CopyButton onClick={() => handleCopyUrl(latestShortURL)} disabled={isCopied}>
 						Copy
 					</CopyButton>
 				) : (
