@@ -1,5 +1,6 @@
-import { SetStateAction, useEffect, useState } from 'react';
+import { SetStateAction, useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
+import { useOutsideClick } from '../hooks/useOutsideClick';
 
 const Wrapper = styled.div`
 	display: flex;
@@ -21,6 +22,7 @@ const Input = styled.input`
 	height: 60px;
 	font-size: 20px;
 	outline: none;
+	cursor: pointer;
 
 	@media (max-width: 768px) {
 		width: 367px;
@@ -72,6 +74,7 @@ const HistoryItem = styled.li`
 	margin-bottom: 5px;
 	position: relative;
 	z-index: 1;
+	cursor: pointer;
 `;
 
 const CopyButton = styled.button`
@@ -123,28 +126,30 @@ export default function Main() {
 	const [historyList, setHistoryList] = useState<string[]>([]);
 	const [isInputFocused, setIsInputFocused] = useState(false);
 	const [latestShortURL, setLatestShortURL] = useState<string>('');
-	// const [isHistoryVisible, setIsHistoryVisible] = useState(false);
+	const [isSearchOpen, setIsSearchOpen] = useState(false);
+	const searchRef = useRef(null);
 
 	const inputChange = (e: { target: { value: SetStateAction<string> } }) => {
 		setInputValue(e.target.value);
 	};
 
-	const shortButtonClick = (e: React.FormEvent) => {
+	const shortenButtonClick = (e: React.FormEvent) => {
 		e.preventDefault();
 		if (inputValue.trim() !== '') {
-			setHistoryList((prevList) => [...prevList, inputValue]);
+			setHistoryList((prevList) => [inputValue, ...prevList]);
 			setInputValue('');
 			setLatestShortURL(inputValue);
+			setIsSearchOpen(false);
 		}
 	};
 
 	const inputFocus = () => {
 		setIsInputFocused(true);
+		setIsSearchOpen(true);
 	};
 
 	const inputBlur = () => {
 		setIsInputFocused(false);
-		
 	};
 
 	const handleCopy = (url: string) => {
@@ -163,9 +168,18 @@ export default function Main() {
 		console.log('History List Updated:', historyList);
 	}, [historyList]);
 
+	const closeSearch = () => {
+		setIsSearchOpen(false);
+	};
+
+	useOutsideClick({
+		ref: searchRef,
+		handler: closeSearch,
+	});
+
 	return (
-		<Wrapper>
-			<InputWrapper onSubmit={shortButtonClick} >
+		<Wrapper ref={searchRef}>
+			<InputWrapper onSubmit={shortenButtonClick}>
 				<Input
 					type='text'
 					placeholder='Please enter a long URL...'
@@ -175,32 +189,34 @@ export default function Main() {
 					onBlur={inputBlur}
 					style={{
 						borderRadius:
-							isInputFocused && historyList.length > 0
-								? '20px 20px 0 0'
-								: '20px',
+							isSearchOpen && historyList.length > 0 ? '20px 20px 0 0' : '20px',
 						borderBottom:
-							isInputFocused && historyList.length > 0
+							isSearchOpen && historyList.length > 0
 								? 'none'
 								: '1px solid #ccc',
 					}}
 				/>
-
-				<Button type='submit'>short</Button>
-
-				{isInputFocused && historyList.length > 0 && (
-					<HistoryList>
-						{historyList.map((item, index) => (
-							<HistoryItem key={index}>
-								<span>{item}</span>
-								<div>
-									<CopyButton onClick={() => handleCopy(item)}>Copy</CopyButton>
-									<DeleteButton onClick={() => handleDelete(index)}>
-										Delete
-									</DeleteButton>
-								</div>
-							</HistoryItem>
-						))}
-					</HistoryList>
+				<Button type='submit'>shorten</Button>
+				{isSearchOpen && (
+					<div>
+						{historyList.length > 0 && (
+							<HistoryList>
+								{historyList.map((item, index) => (
+									<HistoryItem key={index}>
+										<span>{item}</span>
+										<div onClick={(e) => e.stopPropagation()}>
+											<CopyButton onClick={() => handleCopy(item)}>
+												Copy
+											</CopyButton>
+											<DeleteButton onClick={() => handleDelete(index)}>
+												Delete
+											</DeleteButton>
+										</div>
+									</HistoryItem>
+								))}
+							</HistoryList>
+						)}
+					</div>
 				)}
 			</InputWrapper>
 			<LatestShortURL>
