@@ -124,7 +124,6 @@ const LatestShortURL = styled.div`
 export default function Main() {
 	const [inputValue, setInputValue] = useState('');
 	const [historyList, setHistoryList] = useState<string[]>([]);
-	const [isInputFocused, setIsInputFocused] = useState(false);
 	const [latestShortURL, setLatestShortURL] = useState<string>('');
 	const [isSearchOpen, setIsSearchOpen] = useState(false);
 	const searchRef = useRef(null);
@@ -144,12 +143,7 @@ export default function Main() {
 	};
 
 	const inputFocus = () => {
-		setIsInputFocused(true);
 		setIsSearchOpen(true);
-	};
-
-	const inputBlur = () => {
-		setIsInputFocused(false);
 	};
 
 	const handleCopy = (url: string) => {
@@ -186,7 +180,6 @@ export default function Main() {
 					value={inputValue}
 					onChange={inputChange}
 					onFocus={inputFocus}
-					onBlur={inputBlur}
 					style={{
 						borderRadius:
 							isSearchOpen && historyList.length > 0 ? '20px 20px 0 0' : '20px',
