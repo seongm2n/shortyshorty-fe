@@ -1,6 +1,8 @@
-import { SetStateAction, useEffect, useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
 import styled from 'styled-components';
 import { useOutsideClick } from '../hooks/useOutsideClick';
+import useStore from '../stores/store';
+// import axios from 'axios';
 
 const Wrapper = styled.div`
 	display: flex;
@@ -122,42 +124,54 @@ const LatestShortURL = styled.div`
 `;
 
 export default function Main() {
-	const [inputValue, setInputValue] = useState('');
-	const [historyList, setHistoryList] = useState<string[]>([]);
-	const [latestShortURL, setLatestShortURL] = useState<string>('');
-	const [isSearchOpen, setIsSearchOpen] = useState(false);
-	const [isCopied, setIsCopied] = useState(false);
-
+	const inputValue = useStore((state) => state.inputValue);
+	const historyList = useStore((state) => state.historyList);
+	const latestShortURL = useStore((state) => state.latestShortURL);
+	const isSearchOpen = useStore((state) => state.isSearchOpen);
+	const isCopied = useStore((state) => state.isCopied);
 	const searchRef = useRef(null);
 
-	const inputChange = (e: { target: { value: SetStateAction<string> } }) => {
-		setInputValue(e.target.value);
+	const inputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+		useStore.setState({ inputValue: e.target.value });
 	};
+
+	/*
+	const fetchData = async ()=>{
+		try{
+			const res = await axios(`https://api.shortyshorty.site/shorten?url=${inputValue}`)
+			setLatestShortURL
+		}catch(err){
+			alert(err)
+		}
+	}
+	*/
 
 	const shortenButtonClick = (e: React.FormEvent) => {
 		e.preventDefault();
 		if (inputValue.trim() !== '') {
-			setHistoryList((prevList) => [inputValue, ...prevList]);
-			setInputValue('');
-			setLatestShortURL(inputValue);
-			setIsSearchOpen(false);
+			useStore.setState((state) => ({
+				historyList: [state.inputValue, ...state.historyList],
+				inputValue: '',
+				latestShortURL: state.inputValue,
+				isSearchOpen: false,
+			}));
 		}
 	};
 
 	const inputFocus = () => {
-		setIsSearchOpen(true);
+		useStore.setState({ isSearchOpen: true });
 	};
 
 	const handleCopyUrl = async (url: string) => {
 		try {
 			await navigator.clipboard.writeText(url);
-			setIsCopied(true);
+			useStore.setState({ isCopied: true });
 
-			setTimeout(()=>{
-				setIsCopied(false);
-			},2000);
+			setTimeout(() => {
+				useStore.setState({ isCopied: false });
+			}, 2000);
 		} catch (err) {
-			console.error('failed copied',err);
+			console.error('failed copied', err);
 		}
 	};
 
@@ -165,7 +179,7 @@ export default function Main() {
 		console.log('Delete button clicked');
 		const updatedList = [...historyList];
 		updatedList.splice(index, 1);
-		setHistoryList(updatedList);
+		useStore.setState({ historyList: updatedList });
 	};
 
 	useEffect(() => {
@@ -173,7 +187,7 @@ export default function Main() {
 	}, [historyList]);
 
 	const closeSearch = () => {
-		setIsSearchOpen(false);
+		useStore.setState({ isSearchOpen: false });
 	};
 
 	useOutsideClick({
@@ -208,7 +222,10 @@ export default function Main() {
 									<HistoryItem key={index}>
 										<span>{item}</span>
 										<div>
-											<CopyButton onClick={() => handleCopyUrl(item)} disabled={isCopied}>
+											<CopyButton
+												onClick={() => handleCopyUrl(item)}
+												disabled={isCopied}
+											>
 												Copy
 											</CopyButton>
 											<DeleteButton onClick={() => handleDelete(index)}>
@@ -226,7 +243,10 @@ export default function Main() {
 				<span>{latestShortURL}</span>
 
 				{latestShortURL ? (
-					<CopyButton onClick={() => handleCopyUrl(latestShortURL)} disabled={isCopied}>
+					<CopyButton
+						onClick={() => handleCopyUrl(latestShortURL)}
+						disabled={isCopied}
+					>
 						Copy
 					</CopyButton>
 				) : (
