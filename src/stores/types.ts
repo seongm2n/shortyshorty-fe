@@ -4,6 +4,7 @@ export interface AppState {
 	latestShortURL: string;
 	isSearchOpen: boolean;
 	isCopied: boolean;
+	validMessage: string;
 }
 
 export interface AppActions {
@@ -12,4 +13,5 @@ export interface AppActions {
 	setLatestShortURL: (url: string) => void;
 	setIsSearchOpen: (isOpen: boolean) => void;
 	setIsCopied: (isCopied: boolean) => void;
+	setValidMessage: (valid: string) => void;
 }
