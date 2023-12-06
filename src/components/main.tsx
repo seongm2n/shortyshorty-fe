@@ -2,6 +2,11 @@ import { useEffect, useRef } from 'react';
 import styled from 'styled-components';
 import { useOutsideClick } from '../hooks/useOutsideClick';
 import useStore from '../stores/store';
+import InputForm from './input/inputForm';
+import HistoryList from './historyList/historyList';
+import LatestShortURL from './latestShortURL/latestShortURL';
+import { ShortenButton } from '../styles/button';
+import { InputWrapper } from '../styles/input';
 // import axios from 'axios';
 
 const Wrapper = styled.div`
@@ -9,104 +14,7 @@ const Wrapper = styled.div`
 	flex-direction: column;
 `;
 
-const InputWrapper = styled.form`
-	position: relative;
-	display: flex;
-	justify-content: center;
-	align-items: center;
-`;
-
-const Input = styled.input`
-	padding: 10px;
-	border: 1px solid #ccc;
-	border-radius: 20px;
-	width: 534px;
-	height: 60px;
-	font-size: 20px;
-	outline: none;
-	cursor: pointer;
-
-	@media (max-width: 768px) {
-		width: 367px;
-		font-size: 17px;
-	}
-`;
-
-const Button = styled.button`
-	position: absolute;
-	top: 50%;
-	transform: translateY(-50%);
-	right: 0;
-	padding: 8px;
-	margin-right: 10px;
-	background-color: #d9967e;
-	color: #f2f2eb;
-	border: 1px solid #d9967e;
-	border-radius: 15px;
-	font-size: 16px;
-	cursor: pointer;
-
-	&:hover {
-		background-color: #b5645a;
-	}
-
-	@media (max-width: 768px) {
-	}
-`;
-
-const HistoryList = styled.ul`
-	position: absolute;
-	top: 100%;
-	left: 0;
-	width: 100%;
-	list-style: none;
-	padding: 10px;
-	border: 1px solid #ccc;
-	border-radius: 0 0 20px 20px;
-	background-color: #fff;
-	z-index: 1;
-`;
-
-const HistoryItem = styled.li`
-	display: flex;
-	flex-direction: row;
-	justify-content: space-between;
-	text-align: center;
-	align-items: center;
-	margin-bottom: 5px;
-	position: relative;
-	z-index: 1;
-	cursor: pointer;
-`;
-
-const CopyButton = styled.button`
-	background-color: #fffcfc;
-	color: #d9967e;
-	border: 1px solid #d9967e;
-	border-radius: 20px;
-	padding: 8px;
-	text-align: center;
-	text-decoration: none;
-	display: inline-block;
-	font-size: 16px;
-	margin-right: 5px;
-	cursor: pointer;
-`;
-
-const DeleteButton = styled.button`
-	background-color: #fffcfc;
-	color: #d9967e;
-	border: 1px solid #d9967e;
-	border-radius: 20px;
-	padding: 8px;
-	text-align: center;
-	text-decoration: none;
-	display: inline-block;
-	font-size: 16px;
-	cursor: pointer;
-`;
-
-const LatestShortURL = styled.div`
+const LatestShortURLStyle = styled.div`
 	display: flex;
 	flex-direction: row;
 	justify-content: space-between;
@@ -129,10 +37,12 @@ export default function Main() {
 	const latestShortURL = useStore((state) => state.latestShortURL);
 	const isSearchOpen = useStore((state) => state.isSearchOpen);
 	const isCopied = useStore((state) => state.isCopied);
+	const validMessage = useStore((state) => state.validMessage);
 	const searchRef = useRef(null);
 
 	const inputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		useStore.setState({ inputValue: e.target.value });
+		useStore.setState({ validMessage: '' });
 	};
 
 	/*
@@ -148,13 +58,17 @@ export default function Main() {
 
 	const shortenButtonClick = (e: React.FormEvent) => {
 		e.preventDefault();
-		if (inputValue.trim() !== '') {
+		const isValidUrl =
+			/(?:https?:\/\/)?(?:www\.)?[a-zA-Z0-9-]+\.[a-zA-Z]{2,}/.test(inputValue);
+		if (isValidUrl) {
 			useStore.setState((state) => ({
 				historyList: [state.inputValue, ...state.historyList],
 				inputValue: '',
 				latestShortURL: state.inputValue,
 				isSearchOpen: false,
 			}));
+		} else {
+			useStore.setState({ validMessage: 'please enter valid URL' });
 		}
 	};
 
@@ -198,61 +112,40 @@ export default function Main() {
 	return (
 		<Wrapper ref={searchRef}>
 			<InputWrapper onSubmit={shortenButtonClick}>
-				<Input
-					type='text'
-					placeholder='Please enter a long URL...'
-					value={inputValue}
-					onChange={inputChange}
+				<InputForm
+					inputValue={inputValue}
+					onInputChange={inputChange}
 					onFocus={inputFocus}
-					style={{
-						borderRadius:
-							isSearchOpen && historyList.length > 0 ? '20px 20px 0 0' : '20px',
-						borderBottom:
-							isSearchOpen && historyList.length > 0
-								? 'none'
-								: '1px solid #ccc',
-					}}
+					isSearchOpen={isSearchOpen}
+					historyList={historyList}
 				/>
-				<Button type='submit'>shorten</Button>
+				<ShortenButton type='submit'>shorten</ShortenButton>
 				{isSearchOpen && (
-					<div>
-						{historyList.length > 0 && (
-							<HistoryList>
-								{historyList.map((item, index) => (
-									<HistoryItem key={index}>
-										<span>{item}</span>
-										<div>
-											<CopyButton
-												onClick={() => handleCopyUrl(item)}
-												disabled={isCopied}
-											>
-												Copy
-											</CopyButton>
-											<DeleteButton onClick={() => handleDelete(index)}>
-												Delete
-											</DeleteButton>
-										</div>
-									</HistoryItem>
-								))}
-							</HistoryList>
-						)}
-					</div>
+					<HistoryList
+						historyList={historyList}
+						handleCopyUrl={handleCopyUrl}
+						handleDelete={handleDelete}
+						isCopied={isCopied}
+					/>
 				)}
 			</InputWrapper>
-			<LatestShortURL>
-				<span>{latestShortURL}</span>
 
-				{latestShortURL ? (
-					<CopyButton
-						onClick={() => handleCopyUrl(latestShortURL)}
-						disabled={isCopied}
-					>
-						Copy
-					</CopyButton>
+			<LatestShortURLStyle>
+				{validMessage ? (
+					<span style={{ color: 'red' }}>{validMessage}</span>
 				) : (
-					''
+					<>
+						<span>{latestShortURL}</span>
+						{latestShortURL && (
+							<LatestShortURL
+								latestShortURL={latestShortURL}
+								handleCopyUrl={handleCopyUrl}
+								isCopied={isCopied}
+							/>
+						)}
+					</>
 				)}
-			</LatestShortURL>
+			</LatestShortURLStyle>
 		</Wrapper>
 	);
 }
