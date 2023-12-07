@@ -7,7 +7,7 @@ import HistoryList from './historyList/historyList';
 import LatestShortURL from './latestShortURL/latestShortURL';
 import { ShortenButton } from '../styles/button';
 import { InputWrapper } from '../styles/input';
-// import axios from 'axios';
+// import fetchData from '../config/axios';
 
 const Wrapper = styled.div`
 	display: flex;
@@ -38,6 +38,7 @@ export default function Main() {
 	const isSearchOpen = useStore((state) => state.isSearchOpen);
 	const isCopied = useStore((state) => state.isCopied);
 	const validMessage = useStore((state) => state.validMessage);
+	// const key = useStore((state) => state.key);
 	const searchRef = useRef(null);
 
 	const inputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -45,28 +46,31 @@ export default function Main() {
 		useStore.setState({ validMessage: '' });
 	};
 
-	/*
-	const fetchData = async ()=>{
-		try{
-			const res = await axios(`https://api.shortyshorty.site/shorten?url=${inputValue}`)
-			setLatestShortURL
-		}catch(err){
-			alert(err)
-		}
-	}
-	*/
-
-	const shortenButtonClick = (e: React.FormEvent) => {
+	const shortenButtonClick = async (e: React.FormEvent) => {
 		e.preventDefault();
 		const isValidUrl =
 			/(?:https?:\/\/)?(?:www\.)?[a-zA-Z0-9-]+\.[a-zA-Z]{2,}/.test(inputValue);
 		if (isValidUrl) {
-			useStore.setState((state) => ({
-				historyList: [state.inputValue, ...state.historyList],
-				inputValue: '',
-				latestShortURL: state.inputValue,
-				isSearchOpen: false,
-			}));
+			try {
+				// const response = await fetchData({ inputValue });
+				// const { key } = response.data;
+				useStore.setState((state) => ({
+					// historyList: [state.inputValue, shortenedUrl],
+					historyList: [
+						{
+							longURL: state.inputValue,
+							shortenURL: `https://shortyshorty/dsgjslgjsldjg`,
+						},
+						...state.historyList,
+					],
+					inputValue: '',
+					latestShortURL: `https://shortyshorty/dsgjslgjsldjg`,
+					// latestShortURL: state.inputValue,
+					isSearchOpen: false,
+				}));
+			} catch (err) {
+				useStore.setState({ validMessage: 'Failed to shorten URL' });
+			}
 		} else {
 			useStore.setState({ validMessage: 'please enter valid URL' });
 		}
@@ -76,9 +80,12 @@ export default function Main() {
 		useStore.setState({ isSearchOpen: true });
 	};
 
-	const handleCopyUrl = async (url: string) => {
+	const handleCopyUrl = async (
+		item: string | { longURL: string; shortenURL: string }
+	) => {
 		try {
-			await navigator.clipboard.writeText(url);
+			const urlToCopy = typeof item === 'string' ? item : item.shortenURL;
+			await navigator.clipboard.writeText(urlToCopy);
 			useStore.setState({ isCopied: true });
 
 			setTimeout(() => {
@@ -122,10 +129,10 @@ export default function Main() {
 				<ShortenButton type='submit'>shorten</ShortenButton>
 				{isSearchOpen && (
 					<HistoryList
-						historyList={historyList}
 						handleCopyUrl={handleCopyUrl}
 						handleDelete={handleDelete}
 						isCopied={isCopied}
+						historyList={historyList}
 					/>
 				)}
 			</InputWrapper>
