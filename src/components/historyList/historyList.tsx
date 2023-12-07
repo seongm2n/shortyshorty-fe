@@ -28,7 +28,7 @@ const HistoryItemStyle = styled.li`
 `;
 
 interface HistoryListProps {
-	historyList: string[];
+	historyList: (string | { longURL: string; shortenURL: string })[];
 	handleCopyUrl: (url: string) => void;
 	handleDelete: (index: number) => void;
 	isCopied: boolean;
@@ -46,10 +46,15 @@ const HistoryList: React.FC<HistoryListProps> = ({
 				<HistoryListStyle>
 					{historyList.map((item, index) => (
 						<HistoryItemStyle key={index}>
-							<span>{item}</span>
+							<span>{typeof item === 'string' ? item : item.longURL} </span>
+							<span>{typeof item === 'string' ? item : item.shortenURL}</span>
 							<div>
 								<CopyButton
-									onClick={() => handleCopyUrl(item)}
+									onClick={() =>
+										handleCopyUrl(
+											typeof item === 'string' ? item : item.shortenURL
+										)
+									}
 									disabled={isCopied}
 								>
 									Copy

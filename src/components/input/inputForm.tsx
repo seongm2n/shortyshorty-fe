@@ -6,7 +6,7 @@ interface InputFormProps {
 	onInputChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 	onFocus: () => void;
 	isSearchOpen: boolean;
-	historyList: string[];
+	historyList: (string | { longURL: string; shortenURL: string; })[];
 }
 
 const InputForm: React.FC<InputFormProps> = ({
