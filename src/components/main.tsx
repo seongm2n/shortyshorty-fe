@@ -7,7 +7,7 @@ import HistoryList from './historyList/historyList';
 import LatestShortURL from './latestShortURL/latestShortURL';
 import { ShortenButton } from '../styles/button';
 import { InputWrapper } from '../styles/input';
-// import fetchData from '../config/axios';
+import { getApi, postApi } from '../config/axios';
 
 const Wrapper = styled.div`
 	display: flex;
@@ -52,20 +52,18 @@ export default function Main() {
 			/(?:https?:\/\/)?(?:www\.)?[a-zA-Z0-9-]+\.[a-zA-Z]{2,}/.test(inputValue);
 		if (isValidUrl) {
 			try {
-				// const response = await fetchData({ inputValue });
-				// const { key } = response.data;
+				const shortUrl = await postApi(inputValue);
+
 				useStore.setState((state) => ({
-					// historyList: [state.inputValue, shortenedUrl],
 					historyList: [
 						{
-							longURL: state.inputValue,
-							shortenURL: `https://shortyshorty/dsgjslgjsldjg`,
+							originURL: state.inputValue,
+							shortenURL: shortUrl,
 						},
 						...state.historyList,
 					],
 					inputValue: '',
-					latestShortURL: `https://shortyshorty/dsgjslgjsldjg`,
-					// latestShortURL: state.inputValue,
+					latestShortURL: shortUrl,
 					isSearchOpen: false,
 				}));
 			} catch (err) {
@@ -81,18 +79,32 @@ export default function Main() {
 	};
 
 	const handleCopyUrl = async (
-		item: string | { longURL: string; shortenURL: string }
+		item: string | { originURL: string; shortenURL: string }
 	) => {
 		try {
 			const urlToCopy = typeof item === 'string' ? item : item.shortenURL;
+
 			await navigator.clipboard.writeText(urlToCopy);
 			useStore.setState({ isCopied: true });
 
 			setTimeout(() => {
 				useStore.setState({ isCopied: false });
 			}, 2000);
+
+			const originalUrl = await getApi(urlToCopy);
+			window.location.href = originalUrl;
 		} catch (err) {
 			console.error('failed copied', err);
+		}
+	};
+
+	const handleLatestShortURLClick = async () => {
+		try {
+			const originalUrl = await getApi(latestShortURL);
+
+			window.location.href = originalUrl;
+		} catch (err) {
+			console.error('Failed to get original URL', err);
 		}
 	};
 
@@ -142,7 +154,7 @@ export default function Main() {
 					<span style={{ color: 'red' }}>{validMessage}</span>
 				) : (
 					<>
-						<span>{latestShortURL}</span>
+						<span onClick={handleLatestShortURLClick}>{latestShortURL}</span>
 						{latestShortURL && (
 							<LatestShortURL
 								latestShortURL={latestShortURL}
