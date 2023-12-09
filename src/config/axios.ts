@@ -1,20 +1,29 @@
 import axios from 'axios';
 
-interface FetchDataProps {
-	inputValue: string;
-}
-
 const apiUrl = process.env.REACT_APP_API_URL;
-// fetch(`${apiUrl}/shorten?url=${inputValue}`)
 
-const fetchData = async ({ inputValue }: FetchDataProps) => {
+const instance = axios.create({
+	baseURL: apiUrl,
+});
+
+export const postApi = async (url: string): Promise<string> => {
 	try {
-		const response = await axios.get(`${apiUrl}/shorten?url=${inputValue}`);
-		const data = response.data;
-		return data.ShortenedUrl;
+		const response = await instance.post('/api', { url });
+		const { data } = response.data;
+		return data;
 	} catch (err) {
 		console.error('API 호출 실패', err);
+		throw err;
 	}
 };
 
-export default fetchData;
+export const getApi = async (shortUrl: string): Promise<string> => {
+	try {
+		const response = await instance.get(`/api/${shortUrl}`);
+		const { data } = response.data;
+		return data; // 서버에서 받아온 Original Url 반환
+	} catch (err) {
+		console.log('Api 호출 실패', err);
+		throw err;
+	}
+};
