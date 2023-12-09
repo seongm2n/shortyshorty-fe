@@ -8,7 +8,7 @@ const instance = axios.create({
 
 export const postApi = async (url: string): Promise<string> => {
 	try {
-		const response = await instance.post('/api', { url });
+		const response = await instance.post('/', { url });
 		const { data } = response.data;
 		return data;
 	} catch (err) {
@@ -19,7 +19,7 @@ export const postApi = async (url: string): Promise<string> => {
 
 export const getApi = async (shortUrl: string): Promise<string> => {
 	try {
-		const response = await instance.get(`/api/${shortUrl}`);
+		const response = await instance.get(`/${shortUrl}`);
 		const { data } = response.data;
 		return data; // 서버에서 받아온 Original Url 반환
 	} catch (err) {
