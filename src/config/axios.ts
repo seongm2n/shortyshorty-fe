@@ -8,7 +8,7 @@ const instance = axios.create({
 
 export const postApi = async (url: string): Promise<string> => {
 	try {
-		const response = await instance.post('/', { url });
+		const response = await instance.post(`/?url=${url}`);
 		const { data } = response.data;
 		return data;
 	} catch (err) {
