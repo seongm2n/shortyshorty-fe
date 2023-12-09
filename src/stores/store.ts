@@ -8,6 +8,7 @@ const useStore = create<AppState & AppActions>((set) => ({
 	isSearchOpen: false,
 	isCopied: false,
 	validMessage: '',
+	// key:'',
 
 	setInputValue: (value) => set({ inputValue: value }),
 	setHistoryList: (list) => set({ historyList: list }),
@@ -15,6 +16,7 @@ const useStore = create<AppState & AppActions>((set) => ({
 	setIsSearchOpen: (isOpen) => set({ isSearchOpen: isOpen }),
 	setIsCopied: (isCopied) => set({ isCopied: isCopied }),
 	setValidMessage: (valid) => set({ validMessage: valid }),
+	// setKey:(key) => set({key:key}),
 }));
 
 export default useStore;

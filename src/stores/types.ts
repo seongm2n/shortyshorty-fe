@@ -1,10 +1,11 @@
 export interface AppState {
 	inputValue: string;
-	historyList: string[];
+	historyList: (string | { originURL: string; shortenURL: string })[];
 	latestShortURL: string;
 	isSearchOpen: boolean;
 	isCopied: boolean;
 	validMessage: string;
+	// key: string;
 }
 
 export interface AppActions {
@@ -14,4 +15,5 @@ export interface AppActions {
 	setIsSearchOpen: (isOpen: boolean) => void;
 	setIsCopied: (isCopied: boolean) => void;
 	setValidMessage: (valid: string) => void;
+	// setKey: (key: string) => void;
 }
