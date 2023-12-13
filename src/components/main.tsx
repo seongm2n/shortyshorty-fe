@@ -52,18 +52,21 @@ export default function Main() {
 			/(?:https?:\/\/)?(?:www\.)?[a-zA-Z0-9-]+\.[a-zA-Z]{2,}/.test(inputValue);
 		if (isValidUrl) {
 			try {
-				const shortUrl = await postApi(inputValue);
+				const shortCode = await postApi(inputValue);
+
+				const serverURL = `https://api.shortyshorty.site/${shortCode}`;
 
 				useStore.setState((state) => ({
 					historyList: [
 						{
 							originURL: state.inputValue,
-							shortenURL: shortUrl,
+							shortenURL: `https://shortyshory.site/${shortCode}`,
 						},
 						...state.historyList,
 					],
 					inputValue: '',
-					latestShortURL: shortUrl,
+					latestShortURL: `https://shortyshory.site/${shortCode}`,
+					key: serverURL,
 					isSearchOpen: false,
 				}));
 			} catch (err) {
@@ -78,12 +81,18 @@ export default function Main() {
 		useStore.setState({ isSearchOpen: true });
 	};
 
+	const extractShortCode = (url: string): string => {
+		const parts = url.split('/');
+		return parts[parts.length - 1];
+	};
+
 	const handleCopyUrl = async (
 		item: string | { originURL: string; shortenURL: string }
 	) => {
 		try {
+			const shortCode = typeof item === 'string' ? extractShortCode(item) : extractShortCode(item.shortenURL);
+			console.log(shortCode)
 			const urlToCopy = typeof item === 'string' ? item : item.shortenURL;
-
 			await navigator.clipboard.writeText(urlToCopy);
 			useStore.setState({ isCopied: true });
 
@@ -91,20 +100,10 @@ export default function Main() {
 				useStore.setState({ isCopied: false });
 			}, 2000);
 
-			const originalUrl = await getApi(urlToCopy);
+			const originalUrl = await getApi(shortCode);
 			window.location.href = originalUrl;
 		} catch (err) {
 			console.error('failed copied', err);
-		}
-	};
-
-	const handleLatestShortURLClick = async () => {
-		try {
-			const originalUrl = await getApi(latestShortURL);
-
-			window.location.href = originalUrl;
-		} catch (err) {
-			console.error('Failed to get original URL', err);
 		}
 	};
 
@@ -154,7 +153,7 @@ export default function Main() {
 					<span style={{ color: 'red' }}>{validMessage}</span>
 				) : (
 					<>
-						<span onClick={handleLatestShortURLClick}>{latestShortURL}</span>
+						<span>{latestShortURL}</span>
 						{latestShortURL && (
 							<LatestShortURL
 								latestShortURL={latestShortURL}
