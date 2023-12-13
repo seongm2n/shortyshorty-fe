@@ -6,19 +6,22 @@ import Home from './routes/home';
 import About from './routes/about';
 import styled, { createGlobalStyle } from 'styled-components';
 
-const router = createBrowserRouter([
-	{
-		path: '/',
-		element: <Layout />,
-		children: [
-			{
-				path: '',
-				element: <Home />,
-			},
-			{ path: 'about', element: <About /> },
-		],
-	},
-]);
+const router = createBrowserRouter(
+	[
+		{
+			path: '/',
+			element: <Layout />,
+			children: [
+				{
+					path: '',
+					element: <Home />,
+				},
+				{ path: 'about', element: <About /> },
+			],
+		},
+	],
+	{ basename: process.env.PUBLIC_URL }
+);
 
 const GlobalStyled = createGlobalStyle`
 	${reset};
