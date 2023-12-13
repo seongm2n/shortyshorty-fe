@@ -1,3 +1,5 @@
+.PHONY: all build up down ps re
+
 DC=docker compose -f compose.yaml
 
 all: up
@@ -9,7 +11,9 @@ up:
 	${DC} up -d --build
 
 down:
-	${DC} down --rmi all
+	${DC} down
 
 ps:
 	${DC} ps
+
+re: down up
