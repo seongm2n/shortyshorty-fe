@@ -54,5 +54,5 @@
     "@types/styled-components": "^5.1.32",
     "gh-pages": "^6.1.0"
   },
-  "homepage": "https://pizzza-party.github.io/shortyshorty-fe/"
+  "homepage": "."
 }
