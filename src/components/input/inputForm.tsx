@@ -19,7 +19,7 @@ const InputForm: React.FC<InputFormProps> = ({
 	return (
 		<Input
 			type='text'
-			placeholder='Please enter a long URL...'
+			placeholder='Example: https://your-link.com/'
 			value={inputValue}
 			onChange={onInputChange}
 			onFocus={onFocus}
