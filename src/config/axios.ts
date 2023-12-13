@@ -17,9 +17,9 @@ export const postApi = async (url: string): Promise<string> => {
 	}
 };
 
-export const getApi = async (shortUrl: string): Promise<string> => {
+export const getApi = async (shortCode: string): Promise<string> => {
 	try {
-		const response = await instance.get(`/${shortUrl}`);
+		const response = await instance.get(`/${shortCode}`);
 		const { data } = response.data;
 		return data; // 서버에서 받아온 Original Url 반환
 	} catch (err) {
