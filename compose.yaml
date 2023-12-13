@@ -4,4 +4,4 @@ services:
       context: .
     container_name: app
     ports:
-      - "80:80"
+      - "80:3000"
