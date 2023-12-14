@@ -57,12 +57,12 @@ export default function Main() {
 					historyList: [
 						{
 							originURL: state.inputValue,
-							shortenURL: `https://shortyshory.site/${shortCode}`,
+							shortenURL: `https://shortyshorty.site/${shortCode}`,
 						},
 						...state.historyList,
 					],
 					inputValue: '',
-					latestShortURL: `https://shortyshory.site/${shortCode}`,
+					latestShortURL: `https://shortyshorty.site/${shortCode}`,
 					isSearchOpen: false,
 				}));
 			} catch (err) {
