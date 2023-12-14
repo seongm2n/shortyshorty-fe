@@ -38,7 +38,6 @@ export default function Main() {
 	const isSearchOpen = useStore((state) => state.isSearchOpen);
 	const isCopied = useStore((state) => state.isCopied);
 	const validMessage = useStore((state) => state.validMessage);
-	// const key = useStore((state) => state.key);
 	const searchRef = useRef(null);
 
 	const inputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -54,8 +53,6 @@ export default function Main() {
 			try {
 				const shortCode = await postApi(inputValue);
 
-				const serverURL = `https://api.shortyshorty.site/${shortCode}`;
-
 				useStore.setState((state) => ({
 					historyList: [
 						{
@@ -66,7 +63,6 @@ export default function Main() {
 					],
 					inputValue: '',
 					latestShortURL: `https://shortyshory.site/${shortCode}`,
-					key: serverURL,
 					isSearchOpen: false,
 				}));
 			} catch (err) {
