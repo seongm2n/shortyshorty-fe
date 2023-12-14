@@ -16,14 +16,3 @@ export const postApi = async (url: string): Promise<string> => {
 		throw err;
 	}
 };
-
-export const getApi = async (shortCode: string): Promise<string> => {
-	try {
-		const response = await instance.get(`/${shortCode}`);
-		const { data } = response.data;
-		return data; // 서버에서 받아온 Original Url 반환
-	} catch (err) {
-		console.log('Api 호출 실패', err);
-		throw err;
-	}
-};

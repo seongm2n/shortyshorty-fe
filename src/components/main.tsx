@@ -7,7 +7,7 @@ import HistoryList from './historyList/historyList';
 import LatestShortURL from './latestShortURL/latestShortURL';
 import { ShortenButton } from '../styles/button';
 import { InputWrapper } from '../styles/input';
-import { getApi, postApi } from '../config/axios';
+import { postApi } from '../config/axios';
 
 const Wrapper = styled.div`
 	display: flex;
@@ -90,8 +90,11 @@ export default function Main() {
 		item: string | { originURL: string; shortenURL: string }
 	) => {
 		try {
-			const shortCode = typeof item === 'string' ? extractShortCode(item) : extractShortCode(item.shortenURL);
-			console.log(shortCode)
+			const shortCode =
+				typeof item === 'string'
+					? extractShortCode(item)
+					: extractShortCode(item.shortenURL);
+			console.log(shortCode);
 			const urlToCopy = typeof item === 'string' ? item : item.shortenURL;
 			await navigator.clipboard.writeText(urlToCopy);
 			useStore.setState({ isCopied: true });
@@ -100,8 +103,6 @@ export default function Main() {
 				useStore.setState({ isCopied: false });
 			}, 2000);
 
-			const originalUrl = await getApi(shortCode);
-			window.location.href = originalUrl;
 		} catch (err) {
 			console.error('failed copied', err);
 		}
