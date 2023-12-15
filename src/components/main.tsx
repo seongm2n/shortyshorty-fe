@@ -60,7 +60,7 @@ export default function Main() {
 				savedShortCode.current = shortCode;
 				const shortenedUrl = `https://shortyshorty.site/${shortCode}`;
 
-				window.location.href = shortenedUrl;
+				// window.location.href = shortenedUrl;
 
 				setLoading(false);
 				useStore.setState((state) => ({
@@ -105,7 +105,7 @@ export default function Main() {
 			const urlToCopy = typeof item === 'string' ? item : item.shortenURL;
 			await navigator.clipboard.writeText(urlToCopy);
 			useStore.setState({ isCopied: true });
-						
+
 			setTimeout(() => {
 				useStore.setState({ isCopied: false });
 			}, 2000);
