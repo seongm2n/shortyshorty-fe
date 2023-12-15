@@ -7,6 +7,7 @@ const RedirectComponent = () => {
 	useEffect(() => {
 		const currentPath = window.location.pathname;
 		const key = currentPath.substring(1); 
+    console.log(currentPath, key);
 
 		if (key) {
 			navigate(`https://api.shortyshorty.site/${key}`);
