@@ -60,8 +60,6 @@ export default function Main() {
 				savedShortCode.current = shortCode;
 				const shortenedUrl = `https://shortyshorty.site/${shortCode}`;
 
-				// window.location.href = shortenedUrl;
-
 				setLoading(false);
 				useStore.setState((state) => ({
 					historyList: [

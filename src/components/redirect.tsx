@@ -5,8 +5,8 @@ const RedirectComponent = () => {
 	const navigate = useNavigate();
   
 	useEffect(() => {
-		const urlParams = new URLSearchParams(window.location.search);
-		const key = urlParams.get('key');
+		const currentPath = window.location.pathname;
+		const key = currentPath.substring(1); 
 
 		if (key) {
 			navigate(`https://api.shortyshorty.site/${key}`);
