@@ -40,7 +40,6 @@ export default function Main() {
 	const isCopied = useStore((state) => state.isCopied);
 	const validMessage = useStore((state) => state.validMessage);
 	const searchRef = useRef(null);
-	const savedShortCode = useRef<string | null>(null);
 
 	const inputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		useStore.setState({ inputValue: e.target.value });
@@ -57,7 +56,6 @@ export default function Main() {
 				setLoading(true);
 
 				const shortCode = await postApi(inputValue);
-				savedShortCode.current = shortCode;
 				const shortenedUrl = `https://shortyshorty.site/${shortCode}`;
 
 				setLoading(false);
