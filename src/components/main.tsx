@@ -40,6 +40,7 @@ export default function Main() {
 	const isCopied = useStore((state) => state.isCopied);
 	const validMessage = useStore((state) => state.validMessage);
 	const searchRef = useRef(null);
+	const savedShortCode = useRef<string | null>(null);
 
 	const inputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		useStore.setState({ inputValue: e.target.value });
@@ -54,11 +55,10 @@ export default function Main() {
 		if (isValidUrl) {
 			try {
 				setLoading(true);
+
 				const shortCode = await postApi(inputValue);
+				savedShortCode.current = shortCode;
 				const shortenedUrl = `https://shortyshorty.site/${shortCode}`;
-				
-				const originalUrl = await getApi(shortenedUrl);
-				window.location.href = originalUrl;
 
 				setLoading(false);
 				useStore.setState((state) => ({
@@ -83,8 +83,19 @@ export default function Main() {
 		}
 	};
 
-	const inputFocus = () => {
-		useStore.setState({ isSearchOpen: true });
+	const handleGetApi = async () => {
+		try {
+			const shortenedUrl = `https://shortyshorty.site/${savedShortCode.current}`;
+			const originalUrl = await getApi(shortenedUrl);
+
+			const shortCode = extractShortCode(originalUrl);
+
+			const redirectUrl = `https://shortyshorty.site/${shortCode}`;
+
+			window.location.href = redirectUrl;
+		} catch (error) {
+			console.error('Failed to get original URL', error);
+		}
 	};
 
 	const extractShortCode = (url: string): string => {
@@ -92,19 +103,20 @@ export default function Main() {
 		return parts[parts.length - 1];
 	};
 
+	const inputFocus = () => {
+		useStore.setState({ isSearchOpen: true });
+	};
+
 	const handleCopyUrl = async (
 		item: string | { originURL: string; shortenURL: string }
 	) => {
 		try {
-			const shortCode =
-				typeof item === 'string'
-					? extractShortCode(item)
-					: extractShortCode(item.shortenURL);
-			console.log(shortCode);
 			const urlToCopy = typeof item === 'string' ? item : item.shortenURL;
 			await navigator.clipboard.writeText(urlToCopy);
 			useStore.setState({ isCopied: true });
 
+			handleGetApi();
+			
 			setTimeout(() => {
 				useStore.setState({ isCopied: false });
 			}, 2000);
