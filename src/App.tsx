@@ -5,6 +5,7 @@ import Layout from './components/layout';
 import Home from './routes/home';
 import About from './routes/about';
 import styled, { createGlobalStyle } from 'styled-components';
+import RedirectComponent from './components/redirect';
 
 const router = createBrowserRouter(
 	[
@@ -17,6 +18,7 @@ const router = createBrowserRouter(
 					element: <Home />,
 				},
 				{ path: 'about', element: <About /> },
+				{ path: 'redirect', element: <RedirectComponent /> },
 			],
 		},
 	],

@@ -5,12 +5,14 @@ interface LatestShortURLProps {
 	latestShortURL: string;
 	handleCopyUrl: (url: string) => void;
 	isCopied: boolean;
+	handleRedirect: (shortenedUrl: string) => Promise<void>;
 }
 
 const LatestShortURL: React.FC<LatestShortURLProps> = ({
 	latestShortURL,
 	handleCopyUrl,
 	isCopied,
+	handleRedirect,
 }) => {
 	return (
 		<CopyButton

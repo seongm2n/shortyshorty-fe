@@ -60,6 +60,8 @@ export default function Main() {
 				savedShortCode.current = shortCode;
 				const shortenedUrl = `https://shortyshorty.site/${shortCode}`;
 
+				window.location.href = shortenedUrl;
+
 				setLoading(false);
 				useStore.setState((state) => ({
 					historyList: [
@@ -83,24 +85,13 @@ export default function Main() {
 		}
 	};
 
-	const handleGetApi = async () => {
+	const handleRedirect = async (shortenedUrl:string) => {
 		try {
-			const shortenedUrl = `https://shortyshorty.site/${savedShortCode.current}`;
 			const originalUrl = await getApi(shortenedUrl);
-
-			const shortCode = extractShortCode(originalUrl);
-
-			const redirectUrl = `https://shortyshorty.site/${shortCode}`;
-
-			window.location.href = redirectUrl;
+			window.location.href = originalUrl;
 		} catch (error) {
 			console.error('Failed to get original URL', error);
 		}
-	};
-
-	const extractShortCode = (url: string): string => {
-		const parts = url.split('/');
-		return parts[parts.length - 1];
 	};
 
 	const inputFocus = () => {
@@ -114,9 +105,7 @@ export default function Main() {
 			const urlToCopy = typeof item === 'string' ? item : item.shortenURL;
 			await navigator.clipboard.writeText(urlToCopy);
 			useStore.setState({ isCopied: true });
-
-			handleGetApi();
-			
+						
 			setTimeout(() => {
 				useStore.setState({ isCopied: false });
 			}, 2000);
@@ -183,6 +172,7 @@ export default function Main() {
 								latestShortURL={latestShortURL}
 								handleCopyUrl={handleCopyUrl}
 								isCopied={isCopied}
+								handleRedirect={handleRedirect}
 							/>
 						)}
 					</>
