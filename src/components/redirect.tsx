@@ -4,10 +4,10 @@ import { useNavigate, useParams } from 'react-router';
 const RedirectComponent = () => {
 	const navigate = useNavigate();
 	const { key } = useParams();
-  console.log(key)
-
+  
 	useEffect(() => {
-		if (key) {
+    console.log(key)
+    if (key) {
 			navigate(`https://api.shortyshorty.site/${key}`, { replace: true });
 		}
 	}, [key, navigate]);
