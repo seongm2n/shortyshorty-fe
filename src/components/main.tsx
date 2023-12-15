@@ -7,7 +7,7 @@ import HistoryList from './historyList/historyList';
 import LatestShortURL from './latestShortURL/latestShortURL';
 import { ShortenButton } from '../styles/button';
 import { InputWrapper } from '../styles/input';
-import { postApi } from '../config/axios';
+import { getApi, postApi } from '../config/axios';
 
 const Wrapper = styled.div`
 	display: flex;
@@ -56,6 +56,9 @@ export default function Main() {
 				setLoading(true);
 				const shortCode = await postApi(inputValue);
 				const shortenedUrl = `https://shortyshorty.site/${shortCode}`;
+				
+				const originalUrl = await getApi(shortenedUrl);
+				window.location.href = originalUrl;
 
 				setLoading(false);
 				useStore.setState((state) => ({
