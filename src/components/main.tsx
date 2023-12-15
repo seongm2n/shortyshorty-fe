@@ -54,8 +54,8 @@ export default function Main() {
 		if (isValidUrl) {
 			try {
 				setLoading(true);
-				const shortenedUrl = await postApi(inputValue);
-				// const shortenedUrl = `https://shortyshorty.site/${shortCode}`;
+				const shortCode = await postApi(inputValue);
+				const shortenedUrl = `https://shortyshorty.site/${shortCode}`;
 
 				setLoading(false);
 				useStore.setState((state) => ({
