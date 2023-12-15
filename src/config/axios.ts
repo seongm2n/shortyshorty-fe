@@ -3,7 +3,7 @@ import axios from 'axios';
 const instance = axios.create({
 	baseURL: 'https://api.shortyshorty.site',
 	headers: {
-		'Access-Control-Allow-Origin': '*',
+		// 'Access-Control-Allow-Origin': '*',
 		'Content-Type': 'application/json',
 	},
 	timeout: 10000,
