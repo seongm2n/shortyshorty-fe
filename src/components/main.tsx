@@ -54,7 +54,7 @@ export default function Main() {
 				const shortCode = await postApi(inputValue);
 				const shortenedUrl = `https://shortyshorty.site/${shortCode}`;
 
-				const urlInfo = await getApi(shortCode);
+				const urlInfo = await getApi(shortenedUrl);
 				console.log(urlInfo)
 				useStore.setState((state) => ({
 					historyList: [
