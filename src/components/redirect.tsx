@@ -4,6 +4,7 @@ import { useNavigate, useParams } from 'react-router';
 const RedirectComponent = () => {
 	const navigate = useNavigate();
 	const { key } = useParams();
+  console.log(key)
 
 	useEffect(() => {
 		if (key) {
@@ -13,7 +14,6 @@ const RedirectComponent = () => {
 
 	return (
 		<div>
-			{/* 리다이렉션 중일 때 보여질 내용 */}
 			Redirecting...
 		</div>
 	);
