@@ -9,7 +9,7 @@ const RedirectComponent = () => {
 		const key = urlParams.get('key');
 
 		if (key) {
-			navigate(`https://api.shortyshorty.site/?${key}`);
+			navigate(`https://api.shortyshorty.site/${key}`);
 		}
 	}, [navigate]);
 
