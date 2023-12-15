@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import { useOutsideClick } from '../hooks/useOutsideClick';
 import useStore from '../stores/store';
@@ -7,7 +7,7 @@ import HistoryList from './historyList/historyList';
 import LatestShortURL from './latestShortURL/latestShortURL';
 import { ShortenButton } from '../styles/button';
 import { InputWrapper } from '../styles/input';
-import { getApi, postApi } from '../config/axios';
+import { postApi } from '../config/axios';
 
 const Wrapper = styled.div`
 	display: flex;
@@ -32,6 +32,7 @@ const LatestShortURLStyle = styled.div`
 `;
 
 export default function Main() {
+	const [loading, setLoading] = useState(false);
 	const inputValue = useStore((state) => state.inputValue);
 	const historyList = useStore((state) => state.historyList);
 	const latestShortURL = useStore((state) => state.latestShortURL);
@@ -47,20 +48,21 @@ export default function Main() {
 
 	const shortenButtonClick = async (e: React.FormEvent) => {
 		e.preventDefault();
+		setLoading(true);
 		const isValidUrl =
 			/(?:https?:\/\/)?(?:www\.)?[a-zA-Z0-9-]+\.[a-zA-Z]{2,}/.test(inputValue);
 		if (isValidUrl) {
 			try {
+				setLoading(true);
 				const shortCode = await postApi(inputValue);
 				const shortenedUrl = `https://shortyshorty.site/${shortCode}`;
 
-				const urlInfo = await getApi(shortenedUrl);
-				console.log(urlInfo)
+				setLoading(false);
 				useStore.setState((state) => ({
 					historyList: [
 						{
 							originURL: state.inputValue,
-							shortenURL: shortenedUrl,urlInfo
+							shortenURL: shortenedUrl,
 						},
 						...state.historyList,
 					],
@@ -69,9 +71,11 @@ export default function Main() {
 					isSearchOpen: false,
 				}));
 			} catch (err) {
+				setLoading(false);
 				useStore.setState({ validMessage: 'Failed to shorten URL' });
 			}
 		} else {
+			setLoading(false);
 			useStore.setState({ validMessage: 'please enter valid URL' });
 		}
 	};
@@ -101,7 +105,6 @@ export default function Main() {
 			setTimeout(() => {
 				useStore.setState({ isCopied: false });
 			}, 2000);
-
 		} catch (err) {
 			console.error('failed copied', err);
 		}
@@ -137,7 +140,12 @@ export default function Main() {
 					isSearchOpen={isSearchOpen}
 					historyList={historyList}
 				/>
-				<ShortenButton type='submit'>shorten</ShortenButton>
+				<ShortenButton
+					type='submit'
+					disabled={loading}
+				>
+					shorten
+				</ShortenButton>
 				{isSearchOpen && (
 					<HistoryList
 						handleCopyUrl={handleCopyUrl}
@@ -149,6 +157,7 @@ export default function Main() {
 			</InputWrapper>
 
 			<LatestShortURLStyle>
+				{loading ? 'Loading...' : ''}
 				{validMessage ? (
 					<span style={{ color: 'red' }}>{validMessage}</span>
 				) : (

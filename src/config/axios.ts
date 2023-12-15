@@ -21,22 +21,22 @@ export const postApi = async (url: string): Promise<string> => {
 };
 
 
-export const getApi = async (shortenedUrl: string): Promise<string> => {
-	try {
-		const shortCode = extractShortCode(shortenedUrl);
+// export const getApi = async (shortenedUrl: string): Promise<string> => {
+// 	try {
+// 		const shortCode = extractShortCode(shortenedUrl);
 		
-		const response = await instance.get(`/${shortCode}`);
-		const { data } = response.data;
-		return data; // 서버에서 받아온 Original Url 반환
-	} catch (err) {
-		console.log('Api 호출 실패', err);
-		throw err;
-	}
-};
+// 		const response = await instance.get(`/${shortCode}`);
+// 		const { data } = response.data;
+// 		return data; // 서버에서 받아온 Original Url 반환
+// 	} catch (err) {
+// 		console.log('Api 호출 실패', err);
+// 		throw err;
+// 	}
+// };
 
-const extractShortCode = (url: string): string => {
-	const parts = url.split('/');
-	const shortCode = parts[parts.length - 1];
+// const extractShortCode = (url: string): string => {
+// 	const parts = url.split('/');
+// 	const shortCode = parts[parts.length - 1];
 
-	return shortCode;
-};
+// 	return shortCode;
+// };
