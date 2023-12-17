@@ -30,7 +30,7 @@ function App() {
 	return (
 		<Wrapper>
 			<GlobalStyled />
-			<Router basename='/shortyshorty-fe'>
+			<Router>
 				<Routes>
 					<Route
 						path='/'

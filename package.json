@@ -17,8 +17,6 @@
 		"zustand": "^4.4.7"
 	},
 	"scripts": {
-		"deploy": "gh-pages -d build",
-		"predeploy": "npm run build",
 		"start": "react-scripts start",
 		"build": "react-scripts build",
 		"test": "react-scripts test",
@@ -51,8 +49,6 @@
 		"@types/node": "^20.9.2",
 		"@types/react": "^18.2.37",
 		"@types/react-dom": "^18.2.15",
-		"@types/styled-components": "^5.1.32",
-		"gh-pages": "^6.1.0"
-	},
-	"homepage": "https://www.shortyshorty.site"
+		"@types/styled-components": "^5.1.32"
+	}
 }
