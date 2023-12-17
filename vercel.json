@@ -1,9 +1,9 @@
 {
   "redirects": [
     {
-      "source": "/:any*",
-      "destination": "/index.html",
-      "statusCode": 200
+      "source": "/:key",
+      "destination": "/api/redirect/:key",
+      "statusCode": 301
     }
   ]
 }
