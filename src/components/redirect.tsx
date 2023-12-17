@@ -13,9 +13,6 @@ const RedirectComponent = () => {
           const originalUrl = await getApi(key);
           console.log(originalUrl);
 
-          const currentUrl = new URL(window.location.href);
-          currentUrl.pathname = originalUrl;
-
           window.location.href = originalUrl;
 				} else {
 					console.error('Key is undefined or null');
@@ -27,7 +24,7 @@ const RedirectComponent = () => {
 			}
 		};
 		fetchRedirectData();
-	}, [key, navigate]);
+	}, [key]);
 
 	return <div>{loading && <p>Loading...</p>}</div>;
 };
