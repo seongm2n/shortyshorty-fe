@@ -13,7 +13,10 @@
 		<script>
 			const basePath = '/';
 			const redirectPath = window.location.pathname.replace(basePath, '/');
-			window.location.replace(`https://www.shortyshorty.site/${redirectPath}`);
+			
+      if (!window.location.href.includes('www.shortyshorty.site')) {
+				window.location.replace(`https://www.shortyshorty.site${redirectPath}`);
+			}
 		</script>
 	</body>
 </html>
