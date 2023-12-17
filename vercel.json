@@ -1,9 +1,9 @@
 {
   "redirects": [
     {
-      "source": "/(.*)",
-      "destination": "/index.html"
+      "source": "/:any*",
+      "destination": "/index.html",
+      "statusCode": 200
     }
   ]
 }
-
