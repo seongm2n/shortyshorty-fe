@@ -18,7 +18,7 @@ const router = createBrowserRouter(
 					element: <Home />,
 				},
 				{ path: 'about', element: <About /> },
-				{ path: ':key', element: <RedirectComponent /> },
+				{ path: ':key', element: <RedirectComponent key={''} /> },
 			],
 		},
 	],

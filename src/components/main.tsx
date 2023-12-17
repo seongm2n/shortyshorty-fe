@@ -4,10 +4,10 @@ import { useOutsideClick } from '../hooks/useOutsideClick';
 import useStore from '../stores/store';
 import InputForm from './input/inputForm';
 import HistoryList from './historyList/historyList';
-import LatestShortURL from './latestShortURL/latestShortURL';
+import LatestShortURLCopy from './latestShortURL/latestShortURL';
 import { ShortenButton } from '../styles/button';
 import { InputWrapper } from '../styles/input';
-import { getApi, postApi } from '../config/axios';
+import { postApi } from '../config/axios';
 
 const Wrapper = styled.div`
 	display: flex;
@@ -33,6 +33,7 @@ const LatestShortURLStyle = styled.div`
 
 export default function Main() {
 	const [loading, setLoading] = useState(false);
+	const [key, setKey] = useState('');
 	const inputValue = useStore((state) => state.inputValue);
 	const historyList = useStore((state) => state.historyList);
 	const latestShortURL = useStore((state) => state.latestShortURL);
@@ -55,9 +56,9 @@ export default function Main() {
 			try {
 				setLoading(true);
 
-				const shortCode = await postApi(inputValue);
-				const shortenedUrl = `https://www.shortyshorty.site/${shortCode}`;
-				
+				const newShortCode = await postApi(inputValue);
+				const shortenedUrl = `https://shortyshorty.site/${newShortCode}`;
+				setKey(newShortCode);
 				setLoading(false);
 				useStore.setState((state) => ({
 					historyList: [
@@ -78,15 +79,6 @@ export default function Main() {
 		} else {
 			setLoading(false);
 			useStore.setState({ validMessage: 'please enter valid URL' });
-		}
-	};
-
-	const handleRedirect = async (shortenedUrl:string) => {
-		try {
-			const originalUrl = await getApi(shortenedUrl);
-			window.location.href = originalUrl;
-		} catch (error) {
-			console.error('Failed to get original URL', error);
 		}
 	};
 
@@ -164,11 +156,10 @@ export default function Main() {
 					<>
 						<span>{latestShortURL}</span>
 						{latestShortURL && (
-							<LatestShortURL
+							<LatestShortURLCopy
 								latestShortURL={latestShortURL}
 								handleCopyUrl={handleCopyUrl}
 								isCopied={isCopied}
-								handleRedirect={handleRedirect}
 							/>
 						)}
 					</>
