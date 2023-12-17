@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta
+			name="viewport"
+			content="width=device-width, initial-scale=1.0"
+		/>
+		<title>shortyshorty404</title>
+	</head>
+	<body>
+		<div id="root"></div>
+		<script>
+			const basePath = '/';
+			const redirectPath = window.location.pathname.replace(basePath, '/');
+			window.location.replace(`/${redirectPath}`);
+		</script>
+	</body>
+</html>
