@@ -1,9 +1,9 @@
 {
-	"redirects": [
-		{
-			"source": "/:key",
-			"destination": "/:key",
-			"statusCode": 301
-		}
-	]
+  "routes": [
+    {
+      "src": "/:key",
+      "status": 301,
+      "headers": { "Location": "https://api.shortyshorty.site/:key" }
+    }
+  ]
 }
