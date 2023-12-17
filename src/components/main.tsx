@@ -33,7 +33,7 @@ const LatestShortURLStyle = styled.div`
 
 export default function Main() {
 	const [loading, setLoading] = useState(false);
-	const [, setKey] = useState('');
+	// const [, setKey] = useState('');
 	const inputValue = useStore((state) => state.inputValue);
 	const historyList = useStore((state) => state.historyList);
 	const latestShortURL = useStore((state) => state.latestShortURL);
@@ -56,9 +56,9 @@ export default function Main() {
 			try {
 				setLoading(true);
 
-				const newShortCode = await postApi(inputValue);
-				const shortenedUrl = `https://www.shortyshorty.site/${newShortCode}`;
-				setKey(newShortCode);
+				const shortCode = await postApi(inputValue);
+				const shortenedUrl = `https://www.shortyshorty.site/${shortCode}`;
+				// setKey(newShortCode);
 				setLoading(false);
 				useStore.setState((state) => ({
 					historyList: [
