@@ -1,9 +1,15 @@
 {
-  "redirects": [
-    {
-      "source": "/:key",
-      "destination": "/api/redirect/:key",
-      "statusCode": 301
-    }
-  ]
+	"redirects": [
+		{
+			"source": "/:key",
+			"destination": "/:key",
+			"statusCode": 301
+		}
+	],
+	"rewrites": [
+		{
+			"source": "/(.*)",
+			"destination": "/index.html"
+		}
+	]
 }
