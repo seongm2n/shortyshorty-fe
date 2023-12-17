@@ -33,7 +33,7 @@ const LatestShortURLStyle = styled.div`
 
 export default function Main() {
 	const [loading, setLoading] = useState(false);
-	const [key, setKey] = useState('');
+	const [, setKey] = useState('');
 	const inputValue = useStore((state) => state.inputValue);
 	const historyList = useStore((state) => state.historyList);
 	const latestShortURL = useStore((state) => state.latestShortURL);
