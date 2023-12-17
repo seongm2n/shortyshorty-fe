@@ -1,4 +1,4 @@
-import { RouterProvider, createBrowserRouter } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import reset from 'styled-reset';
 import './App.css';
 import Layout from './components/layout';
@@ -6,24 +6,6 @@ import Home from './routes/home';
 import About from './routes/about';
 import styled, { createGlobalStyle } from 'styled-components';
 import RedirectComponent from './components/redirect';
-
-const router = createBrowserRouter(
-	[
-		{
-			path: '/',
-			element: <Layout />,
-			children: [
-				{
-					path: '',
-					element: <Home />,
-				},
-				{ path: 'about', element: <About /> },
-				{ path: ':key', element: <RedirectComponent /> },
-			],
-		},
-	],
-	{ basename: process.env.PUBLIC_URL }
-);
 
 const GlobalStyled = createGlobalStyle`
 	${reset};
@@ -48,7 +30,27 @@ function App() {
 	return (
 		<Wrapper>
 			<GlobalStyled />
-			<RouterProvider router={router} />
+			<Router basename={process.env.PUBLIC_URL}>
+				<Routes>
+					<Route
+						path='/'
+						element={<Layout />}
+					>
+						<Route
+							path=''
+							element={<Home />}
+						/>
+						<Route
+							path='about'
+							element={<About />}
+						/>
+						<Route
+							path=':key'
+							element={<RedirectComponent />}
+						/>
+					</Route>
+				</Routes>
+			</Router>
 		</Wrapper>
 	);
 }
