@@ -12,10 +12,10 @@
 		<div id="root"></div>
 		<script>
 			const basePath = '/';
-			const redirectPath = window.location.pathname.replace(basePath, '/');
+			const redirectPath = window.location.pathname.replace(basePath, '');
 			
       if (!window.location.href.includes('www.shortyshorty.site')) {
-				window.location.replace(`https://www.shortyshorty.site${redirectPath}`);
+				window.location.replace(`https://www.shortyshorty.site/${redirectPath}`);
 			}
 		</script>
 	</body>
