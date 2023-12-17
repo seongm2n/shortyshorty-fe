@@ -30,7 +30,7 @@ function App() {
 	return (
 		<Wrapper>
 			<GlobalStyled />
-			<Router basename={process.env.PUBLIC_URL}>
+			<Router basename='/shortyshorty-fe'>
 				<Routes>
 					<Route
 						path='/'
