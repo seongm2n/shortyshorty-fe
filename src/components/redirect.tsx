@@ -1,20 +1,22 @@
 import { useEffect, useState } from 'react';
-import { useNavigate} from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { getApi } from '../config/axios';
 
-interface RedirectComponentProps {
-	key: string;
-}
-
-const RedirectComponent: React.FC<RedirectComponentProps> = ({ key }) => {
+const RedirectComponent = () => {
 	const navigate = useNavigate();
+	const { key } = useParams<{ key?: string }>();
 	const [loading, setLoading] = useState(true);
 
 	useEffect(() => {
 		const fetchRedirectData = async () => {
 			try {
-				const originalUrl = await getApi(key);
-				navigate(originalUrl);
+        if (key) {
+          const originalUrl = await getApi(key);
+          console.log(originalUrl);
+					navigate(originalUrl);
+				} else {
+					console.error('Key is undefined or null');
+				}
 			} catch (error) {
 				console.error('Failed to get original URL', error);
 			} finally {
