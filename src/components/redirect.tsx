@@ -1,9 +1,8 @@
 import { useEffect, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { getApi } from '../config/axios';
 
 const RedirectComponent = () => {
-	const navigate = useNavigate();
 	const { key } = useParams<{ key?: string }>();
 	const [loading, setLoading] = useState(true);
 
@@ -17,7 +16,7 @@ const RedirectComponent = () => {
           const currentUrl = new URL(window.location.href);
           currentUrl.pathname = originalUrl;
 
-          navigate(currentUrl.pathname);
+          window.location.href = originalUrl;
 				} else {
 					console.error('Key is undefined or null');
 				}
