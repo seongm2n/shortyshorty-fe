@@ -13,7 +13,11 @@ const RedirectComponent = () => {
         if (key) {
           const originalUrl = await getApi(key);
           console.log(originalUrl);
-					navigate(`/${originalUrl}`);
+
+          const currentUrl = new URL(window.location.href);
+          currentUrl.pathname = originalUrl;
+
+          navigate(currentUrl.pathname);
 				} else {
 					console.error('Key is undefined or null');
 				}
