@@ -25,6 +25,10 @@ export const CopyButton = styled.button`
 	font-size: 16px;
 	margin-right: 5px;
 	cursor: pointer;
+
+	&:hover {
+		background-color: #b5645a;
+	}
 `;
 
 export const ShortenButton = styled.button`

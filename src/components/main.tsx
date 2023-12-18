@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import styled from 'styled-components';
 import { useOutsideClick } from '../hooks/useOutsideClick';
 import useStore from '../stores/store';
@@ -8,6 +8,8 @@ import LatestShortURLCopy from './latestShortURL/latestShortURL';
 import { ShortenButton } from '../styles/button';
 import { InputWrapper } from '../styles/input';
 import { postApi } from '../config/axios';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const Wrapper = styled.div`
 	display: flex;
@@ -33,18 +35,18 @@ const LatestShortURLStyle = styled.div`
 
 export default function Main() {
 	const [loading, setLoading] = useState(false);
-	// const [, setKey] = useState('');
 	const inputValue = useStore((state) => state.inputValue);
 	const historyList = useStore((state) => state.historyList);
 	const latestShortURL = useStore((state) => state.latestShortURL);
 	const isSearchOpen = useStore((state) => state.isSearchOpen);
-	const isCopied = useStore((state) => state.isCopied);
 	const validMessage = useStore((state) => state.validMessage);
 	const searchRef = useRef(null);
 
 	const inputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-		useStore.setState({ inputValue: e.target.value });
-		useStore.setState({ validMessage: '' });
+		useStore.setState({
+			inputValue: e.target.value,
+			validMessage: '',
+		});
 	};
 
 	const shortenButtonClick = async (e: React.FormEvent) => {
@@ -58,8 +60,9 @@ export default function Main() {
 
 				const shortCode = await postApi(inputValue);
 				const shortenedUrl = `https://shortyshorty.site/${shortCode}`;
-				// setKey(newShortCode);
+
 				setLoading(false);
+
 				useStore.setState((state) => ({
 					historyList: [
 						{
@@ -72,13 +75,15 @@ export default function Main() {
 					latestShortURL: shortenedUrl,
 					isSearchOpen: false,
 				}));
+				toast.success('URL이 성공적으로 줄어들었습니다.');
 			} catch (err) {
 				setLoading(false);
 				useStore.setState({ validMessage: 'Failed to shorten URL' });
 			}
 		} else {
-			setLoading(false);
 			useStore.setState({ validMessage: 'please enter valid URL' });
+			console.log('else');
+			setLoading(false);
 		}
 	};
 
@@ -92,26 +97,17 @@ export default function Main() {
 		try {
 			const urlToCopy = typeof item === 'string' ? item : item.shortenURL;
 			await navigator.clipboard.writeText(urlToCopy);
-			useStore.setState({ isCopied: true });
-
-			setTimeout(() => {
-				useStore.setState({ isCopied: false });
-			}, 2000);
+			toast.success('URL이 복사되었습니다.');
 		} catch (err) {
-			console.error('failed copied', err);
+			toast.error('URL 복사에 실패했습니다.');
 		}
 	};
 
 	const handleDelete = (index: number) => {
-		console.log('Delete button clicked');
 		const updatedList = [...historyList];
 		updatedList.splice(index, 1);
 		useStore.setState({ historyList: updatedList });
 	};
-
-	useEffect(() => {
-		console.log('History List Updated:', historyList);
-	}, [historyList]);
 
 	const closeSearch = () => {
 		useStore.setState({ isSearchOpen: false });
@@ -142,29 +138,33 @@ export default function Main() {
 					<HistoryList
 						handleCopyUrl={handleCopyUrl}
 						handleDelete={handleDelete}
-						isCopied={isCopied}
 						historyList={historyList}
 					/>
 				)}
 			</InputWrapper>
 
 			<LatestShortURLStyle>
-				{loading ? 'Loading...' : ''}
-				{validMessage ? (
-					<span style={{ color: 'red' }}>{validMessage}</span>
+				{loading ? (
+					'Loading...'
 				) : (
 					<>
-						<span>{latestShortURL}</span>
-						{latestShortURL && (
-							<LatestShortURLCopy
-								latestShortURL={latestShortURL}
-								handleCopyUrl={handleCopyUrl}
-								isCopied={isCopied}
-							/>
+						{validMessage ? (
+							<span style={{ color: 'red' }}>{validMessage}</span>
+						) : (
+							<>
+								<span>{latestShortURL}</span>
+								{latestShortURL && (
+									<LatestShortURLCopy
+										latestShortURL={latestShortURL}
+										handleCopyUrl={handleCopyUrl}
+									/>
+								)}
+							</>
 						)}
 					</>
 				)}
 			</LatestShortURLStyle>
+			<ToastContainer position='top-center' />
 		</Wrapper>
 	);
 }

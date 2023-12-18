@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { getApi } from '../config/axios';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const RedirectComponent = () => {
 	const { key } = useParams<{ key?: string }>();
@@ -15,10 +17,12 @@ const RedirectComponent = () => {
 					window.location.href = originalUrl;
 				} else {
 					console.error('Key is undefined or null');
+					toast.error('shortUrl로 이동한 Key가 없어요');
 					setLoading(false);
 				}
 			} catch (error) {
 				console.error('Failed to get original URL', error);
+				toast.error('유효한 shortUrl로 이동하세요');
 				setLoading(false);
 			}
 		};
@@ -28,6 +32,7 @@ const RedirectComponent = () => {
 	return (
 		<div>
 			{loading && <p>페이지 이동중~~~</p>}
+			<ToastContainer position="top-center" />
 		</div>
 	);
 };

@@ -25,20 +25,50 @@ const HistoryItemStyle = styled.li`
 	position: relative;
 	z-index: 1;
 	cursor: pointer;
+
+	span {
+		font-size: 14px;
+		margin-bottom: 3px;
+	}
+
+	div {
+		display: flex;
+		flex-direction: column;
+	}
+
+	.url-label {
+		font-size: 12px;
+		color: #888;
+		text-align: left;
+	}
+
+	div:last-child {
+		display: flex;
+		flex-direction: row;
+	}
+
+	${CopyButton}, ${DeleteButton} {
+		font-size: 15px; /* 버튼 폰트 사이즈 수정 */
+	}
 `;
+
+const truncateString = (str: string, maxLength: number): string => {
+	if (str.length > maxLength) {
+		return str.substring(0, maxLength) + '...';
+	}
+	return str;
+};
 
 interface HistoryListProps {
 	historyList: (string | { originURL: string; shortenURL: string })[];
 	handleCopyUrl: (url: string) => void;
 	handleDelete: (index: number) => void;
-	isCopied: boolean;
 }
 
 const HistoryList: React.FC<HistoryListProps> = ({
 	historyList,
 	handleCopyUrl,
 	handleDelete,
-	isCopied,
 }) => {
 	return (
 		<div>
@@ -46,8 +76,18 @@ const HistoryList: React.FC<HistoryListProps> = ({
 				<HistoryListStyle>
 					{historyList.map((item, index) => (
 						<HistoryItemStyle key={index}>
-							<span>{typeof item === 'string' ? item : item.originURL} </span>
-							<span>{typeof item === 'string' ? item : item.shortenURL}</span>
+							<div>
+								<span className='url-label'>Original URL</span>
+								<span>
+									{typeof item === 'string'
+										? truncateString(item, 19)
+										: truncateString(item.originURL, 19)}
+								</span>
+							</div>
+							<div>
+								<span className='url-label'>Shorten URL</span>
+								<span>{typeof item === 'string' ? item : item.shortenURL}</span>
+							</div>
 							<div>
 								<CopyButton
 									onClick={() =>
@@ -55,7 +95,6 @@ const HistoryList: React.FC<HistoryListProps> = ({
 											typeof item === 'string' ? item : item.shortenURL
 										)
 									}
-									disabled={isCopied}
 								>
 									Copy
 								</CopyButton>

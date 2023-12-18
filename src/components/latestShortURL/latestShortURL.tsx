@@ -4,21 +4,14 @@ import { CopyButton } from '../../styles/button';
 interface LatestShortURLProps {
 	latestShortURL: string;
 	handleCopyUrl: (url: string) => void;
-	isCopied: boolean;
 }
 
 const LatestShortURLCopy: React.FC<LatestShortURLProps> = ({
 	latestShortURL,
 	handleCopyUrl,
-	isCopied,
 }) => {
 	return (
-		<CopyButton
-			onClick={() => handleCopyUrl(latestShortURL)}
-			disabled={isCopied}
-		>
-			Copy
-		</CopyButton>
+		<CopyButton onClick={() => handleCopyUrl(latestShortURL)}>Copy</CopyButton>
 	);
 };
 
