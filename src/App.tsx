@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import reset from 'styled-reset';
 import './App.css';
 import Layout from './components/layout';
@@ -6,6 +6,7 @@ import Home from './routes/home';
 import About from './routes/about';
 import styled, { createGlobalStyle } from 'styled-components';
 import RedirectComponent from './components/redirect';
+import NotFound from './components/notfound';
 
 const GlobalStyled = createGlobalStyle`
 	${reset};
@@ -26,31 +27,27 @@ const Wrapper = styled.div`
 	justify-content: center;
 `;
 
+const router = createBrowserRouter([
+	{
+		path: '/',
+		element: <Layout />,
+		errorElement: <NotFound />,
+		children: [
+			{
+				path: '',
+				element: <Home />,
+			},
+			{ path: 'about', element: <About /> },
+		],
+	},
+	{ path: ':key', element: <RedirectComponent /> },
+]);
+
 function App() {
 	return (
 		<Wrapper>
 			<GlobalStyled />
-			<Router>
-				<Routes>
-					<Route
-						path='/'
-						element={<Layout />}
-					>
-						<Route
-							path=''
-							element={<Home />}
-						/>
-						<Route
-							path='about'
-							element={<About />}
-						/>
-						<Route
-							path=':key'
-							element={<RedirectComponent />}
-						/>
-					</Route>
-				</Routes>
-			</Router>
+			<RouterProvider router={router} />
 		</Wrapper>
 	);
 }
