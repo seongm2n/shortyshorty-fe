@@ -11,6 +11,11 @@ export const DeleteButton = styled.button`
 	display: inline-block;
 	font-size: 16px;
 	cursor: pointer;
+
+	&:hover {
+		background-color: #b5645a;
+		color: #f2f2eb;
+	}
 `;
 
 export const CopyButton = styled.button`
@@ -28,6 +33,7 @@ export const CopyButton = styled.button`
 
 	&:hover {
 		background-color: #b5645a;
+		color: #f2f2eb;
 	}
 `;
 

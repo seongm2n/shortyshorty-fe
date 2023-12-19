@@ -19,17 +19,42 @@ const Wrapper = styled.div`
 const LatestShortURLStyle = styled.div`
 	display: flex;
 	flex-direction: row;
-	justify-content: space-between;
+	justify-content: space-evenly;
 	text-align: center;
 	align-items: center;
 	padding: 15px;
 	width: 534px;
 	height: 60px;
 	font-size: 20px;
+	color: #51474e;
 
 	@media (max-width: 768px) {
 		width: 367px;
 		font-size: 17px;
+	}
+
+	span {
+		position: relative;
+
+		&::before,
+		&::after {
+			content: '';
+			position: absolute;
+			width: 50%;
+			height: 4px;
+			background-color: #d9967e;
+			bottom: -7px;
+		}
+
+		&::before {
+			left: 0;
+			border-radius: 5px 0 0 5px;
+		}
+
+		&::after {
+			right: 0;
+			border-radius: 0 5px 5px 0;
+		}
 	}
 `;
 
@@ -39,7 +64,6 @@ export default function Main() {
 	const historyList = useStore((state) => state.historyList);
 	const latestShortURL = useStore((state) => state.latestShortURL);
 	const isSearchOpen = useStore((state) => state.isSearchOpen);
-	const validMessage = useStore((state) => state.validMessage);
 	const searchRef = useRef(null);
 
 	const inputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -78,11 +102,10 @@ export default function Main() {
 				toast.success('URL이 성공적으로 줄어들었습니다.');
 			} catch (err) {
 				setLoading(false);
-				useStore.setState({ validMessage: 'Failed to shorten URL' });
+				toast.error('URL을 줄이는데 실패했습니다.');
 			}
 		} else {
-			useStore.setState({ validMessage: 'please enter valid URL' });
-			console.log('else');
+			toast.error('https://를 포함한 정확한 URL을 입력해주세요 ');
 			setLoading(false);
 		}
 	};
@@ -97,6 +120,7 @@ export default function Main() {
 		try {
 			const urlToCopy = typeof item === 'string' ? item : item.shortenURL;
 			await navigator.clipboard.writeText(urlToCopy);
+
 			toast.success('URL이 복사되었습니다.');
 		} catch (err) {
 			toast.error('URL 복사에 실패했습니다.');
@@ -148,18 +172,12 @@ export default function Main() {
 					'Loading...'
 				) : (
 					<>
-						{validMessage ? (
-							<span style={{ color: 'red' }}>{validMessage}</span>
-						) : (
-							<>
-								<span>{latestShortURL}</span>
-								{latestShortURL && (
-									<LatestShortURLCopy
-										latestShortURL={latestShortURL}
-										handleCopyUrl={handleCopyUrl}
-									/>
-								)}
-							</>
+						<span>{latestShortURL}</span>
+						{latestShortURL && (
+							<LatestShortURLCopy
+								latestShortURL={latestShortURL}
+								handleCopyUrl={handleCopyUrl}
+							/>
 						)}
 					</>
 				)}

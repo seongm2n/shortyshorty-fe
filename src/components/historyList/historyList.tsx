@@ -24,6 +24,8 @@ const HistoryItemStyle = styled.li`
 	margin-bottom: 5px;
 	position: relative;
 	z-index: 1;
+	color: #51474e;
+
 	cursor: pointer;
 
 	span {
@@ -80,7 +82,7 @@ const HistoryList: React.FC<HistoryListProps> = ({
 								<span className='url-label'>Original URL</span>
 								<span>
 									{typeof item === 'string'
-										? truncateString(item, 19)
+										? truncateString(item, 16)
 										: truncateString(item.originURL, 19)}
 								</span>
 							</div>
@@ -90,11 +92,12 @@ const HistoryList: React.FC<HistoryListProps> = ({
 							</div>
 							<div>
 								<CopyButton
-									onClick={() =>
+									onClick={(e) => {
 										handleCopyUrl(
 											typeof item === 'string' ? item : item.shortenURL
-										)
-									}
+										);
+										e.stopPropagation(); // 이벤트 버블링 막기
+									}}
 								>
 									Copy
 								</CopyButton>
