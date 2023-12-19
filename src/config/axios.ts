@@ -1,9 +1,9 @@
 import axios from 'axios';
+import { apiError } from './errorHandling';
 
 const instance = axios.create({
 	baseURL: 'https://api.shortyshorty.site',
 	headers: {
-		// 'Access-Control-Allow-Origin': '*',
 		'Content-Type': 'application/json',
 	},
 	timeout: 10000,
@@ -15,7 +15,7 @@ export const postApi = async (url: string): Promise<string> => {
 		const { data } = response.data;
 		return data;
 	} catch (err) {
-		console.error('API 호출 실패', err);
+		apiError(err);
 		throw err;
 	}
 };
@@ -23,12 +23,12 @@ export const postApi = async (url: string): Promise<string> => {
 export const getApi = async (shortenedUrl: string): Promise<string> => {
 	try {
 		const shortCode = extractShortCode(shortenedUrl);
-		
+
 		const response = await instance.get(`/${shortCode}`);
 		const { data } = response.data;
-		return data; // 서버에서 받아온 Original Url 반환
+		return data;
 	} catch (err) {
-		console.log('Api 호출 실패', err);
+		apiError(err);
 		throw err;
 	}
 };
@@ -39,3 +39,5 @@ const extractShortCode = (url: string): string => {
 
 	return shortCode;
 };
+
+
