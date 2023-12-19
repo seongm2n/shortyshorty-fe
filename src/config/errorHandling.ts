@@ -3,7 +3,6 @@ import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 export const apiError = (error: any) => {
-	console.error('API 에러:', error); // 추가된 부분
 	if (is502Error(error)) {
 		toast.error('502 Bad Gateway');
 	} else if (is500Error(error)) {
@@ -12,8 +11,6 @@ export const apiError = (error: any) => {
 		toast.error('404 페이지를 찾을 수 없어요!');
 	} else if (isTimeoutError(error)) {
 		toast.error('서버 응답 시간이 초과되었습니다.');
-	} else {
-		toast.error('알 수 없는 에러 발생');
 	}
 };
 

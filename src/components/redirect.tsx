@@ -16,12 +16,10 @@ const RedirectComponent = () => {
 					setLoading(false);
 					window.location.href = originalUrl;
 				} else {
-					console.error('Key is undefined or null');
 					toast.error('shortUrl로 이동한 Key가 없어요');
 					setLoading(false);
 				}
 			} catch (error) {
-				console.error('Failed to get original URL', error);
 				toast.error('유효한 shortUrl로 이동하세요');
 				setLoading(false);
 			}
