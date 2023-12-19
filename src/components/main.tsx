@@ -10,6 +10,7 @@ import { InputWrapper } from '../styles/input';
 import { postApi } from '../config/axios';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { BeatLoader } from 'react-spinners';
 
 const Wrapper = styled.div`
 	display: flex;
@@ -56,6 +57,14 @@ const LatestShortURLStyle = styled.div`
 			border-radius: 0 5px 5px 0;
 		}
 	}
+`;
+
+const LoadingStyle = styled.div`
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: center;
+	padding: 15px;
 `;
 
 export default function Main() {
@@ -167,21 +176,22 @@ export default function Main() {
 				)}
 			</InputWrapper>
 
-			<LatestShortURLStyle>
-				{loading ? (
-					'Loading...'
-				) : (
-					<>
-						<span>{latestShortURL}</span>
-						{latestShortURL && (
-							<LatestShortURLCopy
-								latestShortURL={latestShortURL}
-								handleCopyUrl={handleCopyUrl}
-							/>
-						)}
-					</>
-				)}
-			</LatestShortURLStyle>
+			{!loading ? (
+				<LatestShortURLStyle>
+					<span>{latestShortURL}</span>
+					{latestShortURL && (
+						<LatestShortURLCopy
+							latestShortURL={latestShortURL}
+							handleCopyUrl={handleCopyUrl}
+						/>
+					)}
+				</LatestShortURLStyle>
+			) : (
+				<LoadingStyle>
+					<BeatLoader color='#d9967e' />
+				</LoadingStyle>
+			)}
+
 			<ToastContainer position='top-center' />
 		</Wrapper>
 	);

@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom';
 import { getApi } from '../config/axios';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import PageMoving from './pageMoving';
 
 const RedirectComponent = () => {
 	const { key } = useParams<{ key?: string }>();
@@ -29,7 +30,7 @@ const RedirectComponent = () => {
 
 	return (
 		<div>
-			{loading && <p>페이지 이동중~~~</p>}
+			{loading && <PageMoving/>}
 			<ToastContainer position="top-center" />
 		</div>
 	);
