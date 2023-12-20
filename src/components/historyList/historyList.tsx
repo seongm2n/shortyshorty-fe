@@ -3,7 +3,6 @@ import styled from 'styled-components';
 import { CopyButton, DeleteButton } from '../../styles/button';
 
 const HistoryListStyle = styled.ul`
-	position: absolute;
 	top: 100%;
 	left: 0;
 	width: 100%;
@@ -50,7 +49,7 @@ const HistoryItemStyle = styled.li`
 	}
 
 	${CopyButton}, ${DeleteButton} {
-		font-size: 15px; /* 버튼 폰트 사이즈 수정 */
+		font-size: 15px;
 	}
 `;
 
@@ -96,7 +95,7 @@ const HistoryList: React.FC<HistoryListProps> = ({
 										handleCopyUrl(
 											typeof item === 'string' ? item : item.shortenURL
 										);
-										e.stopPropagation(); // 이벤트 버블링 막기
+										e.stopPropagation();
 									}}
 								>
 									Copy

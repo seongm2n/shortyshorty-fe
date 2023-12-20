@@ -73,14 +73,8 @@ export default function Main() {
 	const historyList = useStore((state) => state.historyList);
 	const latestShortURL = useStore((state) => state.latestShortURL);
 	const isSearchOpen = useStore((state) => state.isSearchOpen);
+	console.log('isSearchOpen:', isSearchOpen);
 	const searchRef = useRef(null);
-
-	const inputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-		useStore.setState({
-			inputValue: e.target.value,
-			validMessage: '',
-		});
-	};
 
 	const shortenButtonClick = async (e: React.FormEvent) => {
 		e.preventDefault();
@@ -117,6 +111,12 @@ export default function Main() {
 			toast.error('https://를 포함한 정확한 URL을 입력해주세요 ');
 			setLoading(false);
 		}
+	};
+
+	const inputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+		useStore.setState({
+			inputValue: e.target.value,
+		});
 	};
 
 	const inputFocus = () => {
@@ -167,14 +167,15 @@ export default function Main() {
 				>
 					shorten
 				</ShortenButton>
-				{isSearchOpen && (
-					<HistoryList
-						handleCopyUrl={handleCopyUrl}
-						handleDelete={handleDelete}
-						historyList={historyList}
-					/>
-				)}
 			</InputWrapper>
+
+			{isSearchOpen && (
+				<HistoryList
+					handleCopyUrl={handleCopyUrl}
+					handleDelete={handleDelete}
+					historyList={historyList}
+				/>
+			)}
 
 			{!loading ? (
 				<LatestShortURLStyle>
