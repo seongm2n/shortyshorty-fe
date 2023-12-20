@@ -28,7 +28,7 @@ export const CopyButton = styled.button`
 	text-decoration: none;
 	display: inline-block;
 	font-size: 16px;
-	margin-right: 5px;
+	/* margin-right: 5px; */
 	cursor: pointer;
 
 	&:hover {

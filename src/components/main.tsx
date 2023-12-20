@@ -24,7 +24,7 @@ const LatestShortURLStyle = styled.div`
 	text-align: center;
 	align-items: center;
 	padding: 15px;
-	width: 534px;
+	width: 600px;
 	height: 60px;
 	font-size: 20px;
 	color: #51474e;

@@ -35,6 +35,10 @@ const HistoryItemStyle = styled.li`
 		flex-direction: column;
 	}
 
+	.d {
+		width: 16%;
+	}
+
 	.url-label {
 		font-size: 12px;
 		color: #888;
@@ -47,7 +51,11 @@ const HistoryItemStyle = styled.li`
 	}
 
 	${CopyButton}, ${DeleteButton} {
-		font-size: 15px;
+		font-size: 13px;
+	}
+
+	${CopyButton} {
+		margin-right: 5px;
 	}
 
 	@media (max-width: 768px) {
@@ -55,7 +63,7 @@ const HistoryItemStyle = styled.li`
 		align-items: flex-start;
 
 		div {
-			margin-bottom: 5px;
+			margin-bottom: 3px;
 		}
 
 		div:last-child {
@@ -63,16 +71,36 @@ const HistoryItemStyle = styled.li`
 		}
 
 		${CopyButton}, ${DeleteButton} {
-			font-size: 14px;
-			margin-top: 5px;
+			font-size: 13px;
 		}
+
+		span {
+			font-size: 13px;
+		}
+
+		.url-label {
+			font-size: 11px;
+			color: #888;
+			text-align: left;
+		}
+
+		.d {
+		width: 30%;
+	}
 	}
 `;
 
 const truncateString = (str: string, maxLength: number): string => {
-	if (str.length > maxLength) {
-		return str.substring(0, maxLength) + '...';
+	const ellipsis = '...';
+	const strLength = str.length;
+
+	if (strLength > maxLength) {
+		return str.substring(0, maxLength - ellipsis.length) + ellipsis;
+	} else if (strLength < maxLength) {
+		const padding = ' '.repeat(maxLength - strLength);
+		return str + padding;
 	}
+
 	return str;
 };
 
@@ -89,22 +117,22 @@ const HistoryList: React.FC<HistoryListProps> = ({
 }) => {
 	const isMobile = window.innerWidth <= 768;
 	const maxItemsToShow = isMobile ? 2 : 10;
-  const truncatedList = historyList.slice(0, maxItemsToShow);
+	const truncatedList = historyList.slice(0, maxItemsToShow);
 	return (
 		<div>
 			{historyList.length > 0 && (
 				<HistoryListStyle>
 					{truncatedList.map((item, index) => (
 						<HistoryItemStyle key={index}>
-							<div>
+							<div className='d'>
 								<span className='url-label'>Original URL</span>
 								<span>
 									{typeof item === 'string'
-										? truncateString(item, 20)
-										: truncateString(item.originURL, 20)}
+										? truncateString(item, 30)
+										: truncateString(item.originURL, 28)}
 								</span>
 							</div>
-							<div>
+							<div className='d'>
 								<span className='url-label'>Shorten URL</span>
 								<span>{typeof item === 'string' ? item : item.shortenURL}</span>
 							</div>

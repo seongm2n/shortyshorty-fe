@@ -1,10 +1,10 @@
 import styled from 'styled-components';
 
 export const Input = styled.input`
-	padding: 13px;
+	padding: 10px;
 	border: 1px solid #ccc;
 	border-radius: 20px;
-	width: 534px;
+	width: 600px;
 	height: 60px;
 	font-size: 18px;
 	outline: none;

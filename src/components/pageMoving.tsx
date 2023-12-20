@@ -13,6 +13,11 @@ const PageLoadingWrapper = styled.div`
     font-size: 18px;
     color:#51474e;
   }
+
+  .loader {
+    margin-top: 15px; /* Adjust the margin-top as needed */
+  }
+
 `;
 
 export default function PageMoving() {
@@ -20,7 +25,7 @@ export default function PageMoving() {
     <PageLoadingWrapper>
       <p>잠시만 기다려주세요</p>
       <p>페이지 이동 중</p>
-      <PropagateLoader color='#d9967e' />
+      <PropagateLoader className="loader" color='#d9967e' />
     </PageLoadingWrapper>
   );
 }
