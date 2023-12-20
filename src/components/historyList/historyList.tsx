@@ -128,8 +128,8 @@ const HistoryList: React.FC<HistoryListProps> = ({
 								<span className='url-label'>Original URL</span>
 								<span>
 									{typeof item === 'string'
-										? truncateString(item, 30)
-										: truncateString(item.originURL, 28)}
+										? truncateString(item, 20)
+										: truncateString(item.originURL, 20)}
 								</span>
 							</div>
 							<div className='d'>
