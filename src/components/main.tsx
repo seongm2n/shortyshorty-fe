@@ -73,7 +73,6 @@ export default function Main() {
 	const historyList = useStore((state) => state.historyList);
 	const latestShortURL = useStore((state) => state.latestShortURL);
 	const isSearchOpen = useStore((state) => state.isSearchOpen);
-	console.log('isSearchOpen:', isSearchOpen);
 	const searchRef = useRef(null);
 
 	const shortenButtonClick = async (e: React.FormEvent) => {
