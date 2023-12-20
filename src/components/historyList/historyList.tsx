@@ -25,8 +25,6 @@ const HistoryItemStyle = styled.li`
 	z-index: 1;
 	color: #51474e;
 
-	cursor: pointer;
-
 	span {
 		font-size: 14px;
 		margin-bottom: 3px;
@@ -51,6 +49,24 @@ const HistoryItemStyle = styled.li`
 	${CopyButton}, ${DeleteButton} {
 		font-size: 15px;
 	}
+
+	@media (max-width: 768px) {
+		flex-direction: column;
+		align-items: flex-start;
+
+		div {
+			margin-bottom: 5px;
+		}
+
+		div:last-child {
+			flex-direction: row;
+		}
+
+		${CopyButton}, ${DeleteButton} {
+			font-size: 14px;
+			margin-top: 5px;
+		}
+	}
 `;
 
 const truncateString = (str: string, maxLength: number): string => {
@@ -71,18 +87,21 @@ const HistoryList: React.FC<HistoryListProps> = ({
 	handleCopyUrl,
 	handleDelete,
 }) => {
+	const isMobile = window.innerWidth <= 768;
+	const maxItemsToShow = isMobile ? 2 : 10;
+  const truncatedList = historyList.slice(0, maxItemsToShow);
 	return (
 		<div>
 			{historyList.length > 0 && (
 				<HistoryListStyle>
-					{historyList.map((item, index) => (
+					{truncatedList.map((item, index) => (
 						<HistoryItemStyle key={index}>
 							<div>
 								<span className='url-label'>Original URL</span>
 								<span>
 									{typeof item === 'string'
-										? truncateString(item, 16)
-										: truncateString(item.originURL, 19)}
+										? truncateString(item, 20)
+										: truncateString(item.originURL, 20)}
 								</span>
 							</div>
 							<div>
