@@ -72,25 +72,16 @@ const GridWrapper = styled.div`
 	grid-template-rows: repeat(2, auto);
 	gap: 20px;
 	margin-top: 20px;
-
-	@media screen and (max-width: 768px) {
-		margin-top: 10px;
-		grid-template-columns: 1fr;
-	}
 `;
 
 const GridItem = styled.div`
 	display: flex;
 	flex-direction: column;
-	justify-content: center;
 	align-items: center;
 	align-content: center;
 	border: 1px solid #ccc;
 	padding: 20px;
 	border-radius: 20px;
-
-	@media screen and (max-width: 768px) {
-	}
 
 	h3 {
 		font-size: 20px;
