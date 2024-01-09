@@ -11,6 +11,7 @@ const Wrapper = styled.div`
 	height: 100%;
 	width: 100%;
 	max-width: 860px;
+	overflow-y: auto;
 
 	@media (min-width: 768px) {
 		padding: 50px;
@@ -38,7 +39,7 @@ const Header = styled.div`
 	${headerStyles}
 
 	&.about-page-header {
-		font-size: 30px;
+		font-size: 40px;
 		padding-top: 10px;
 
 		@media (min-width: 768px) {
@@ -50,7 +51,7 @@ const Header = styled.div`
 
 const Footer = styled.div`
 	position: fixed;
-	bottom: 20px;
+	bottom: 30px;
 	display: flex;
 	justify-content: center;
 	width: 100%;
@@ -61,12 +62,33 @@ const Footer = styled.div`
 	@media (min-width: 768px) {
 		bottom: 40px;
 		font-size: 25px;
+		margin-top: 30px;
+	}
+
+	@media (max-width: 768px) {
+		position: static;
+		margin-top: 20px;
+	}
+`;
+
+const ShortyCopyLight = styled.div`
+	position: fixed;
+	bottom: 5px;
+	display: flex;
+	justify-content: center;
+	font-size: 13px;
+	color: #675962;
+
+	@media (max-width: 768px) {
+		position: static;
+		margin-top: 20px;
 	}
 `;
 
 export default function Layout() {
 	const location = useLocation();
 	const [aboutPage, setAboutPage] = useState(location.pathname === '/about');
+	const isHomePage = location.pathname === '/';
 
 	useEffect(() => {
 		setAboutPage(location.pathname === '/about');
@@ -78,9 +100,16 @@ export default function Layout() {
 				<Link to='/'>shortyshorty</Link>
 			</Header>
 			<Outlet />
-			<Footer>
+			<Footer
+				style={{ position: isHomePage && !aboutPage ? 'fixed' : 'static' }}
+			>
 				{aboutPage ? <Link to='/'>Home</Link> : <Link to='/about'>About</Link>}
 			</Footer>
+			<ShortyCopyLight
+				style={{ position: isHomePage && !aboutPage ? 'fixed' : 'static' }}
+			>
+				© 2023 shortyshorty - Tool to shorten a long link
+			</ShortyCopyLight>
 		</Wrapper>
 	);
 }
