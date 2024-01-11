@@ -7,6 +7,8 @@ import About from './routes/about';
 import styled, { createGlobalStyle } from 'styled-components';
 import RedirectComponent from './components/redirect';
 import NotFound from './components/notfound';
+import { useEffect } from 'react';
+import ReactGA from 'react-ga';
 
 const GlobalStyled = createGlobalStyle`
 	${reset};
@@ -44,6 +46,11 @@ const router = createBrowserRouter([
 ]);
 
 function App() {
+	useEffect(() => {
+		ReactGA.initialize('GA_MEASUREMENT_ID');
+		ReactGA.pageview(window.location.pathname + window.location.search);
+	}, []);
+
 	return (
 		<Wrapper>
 			<GlobalStyled />
