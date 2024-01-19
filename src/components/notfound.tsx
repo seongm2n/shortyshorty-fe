@@ -1,3 +1,3 @@
 export default function NotFound() {
-	return <div>something is wrong</div>;
+	return <div>Sorry ! Something is wrong</div>;
 }
