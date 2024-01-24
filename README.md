@@ -2,12 +2,11 @@
 
 > 긴 url을 짧게 줄여주는 서비스
 ### 배포사이트 :  http://www.shortyshorty.site
----
 
 ### 기간 : 2023.10 ~ 2024.01
 ---
 
-### 스택
+### 기술 스택
   ![Visual Studio Code](https://img.shields.io/badge/Visual%20Studio%20Code-007ACC?style=for-the-badge&logo=visual-studio-code&logoColor=white)
   ![Git](https://img.shields.io/badge/Git-F05032?style=for-the-badge&logo=git&logoColor=white)
   ![GitHub](https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=github&logoColor=white)
@@ -18,10 +17,13 @@
 
   ![React](https://img.shields.io/badge/react-ffffff?style=for-the-badge&logo=react)
   ![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=TypeScript&logoColor=white)
-  ![react-router-dom](https://img.shields.io/badge/react--router--dom-CA4245?style=for-the-badge&logo=react-router&logoColor=white)
-  ![Styled-Components](https://img.shields.io/badge/styled--components%20CSS-DB7093?style=for-the-badge&logo=styledcomponents&logoColor=white)
   ![Zustand](https://img.shields.io/badge/zustand-000000?style=for-the-badge&logo=styledcomponents&logoColor=white)
   ![Axios](https://img.shields.io/badge/Axios-5A29E4?style=for-the-badge&logo=axios&logoColor=white)
+  ![react-router-dom](https://img.shields.io/badge/react--router--dom-CA4245?style=for-the-badge&logo=react-router&logoColor=white)
+  ![Styled-Components](https://img.shields.io/badge/styled--components%20CSS-DB7093?style=for-the-badge&logo=styledcomponents&logoColor=white)
+  ![react-icons](https://img.shields.io/badge/react--icons-EE3984?style=for-the-badge&logo=react--icons&logoColor=white)
+  ![react-spinners](https://img.shields.io/badge/react--spinners-6D4C9F?style=for-the-badge&logo=react--spinners&logoColor=white)
+  ![react-toastify](https://img.shields.io/badge/react--toastify-E4405F?style=for-the-badge&logo=react--toastify&logoColor=white)
 
 ---
 ### 기능 구현
